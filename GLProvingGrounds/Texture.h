@@ -30,7 +30,7 @@ public:
 
 	
 	Texture(TexType t, GLint f)
-		:type(t), format(f)
+		:type(t), format(f), boundTo(-1)
 	{
 		GLCALL(glGenTextures(1, &buffer));
 	}
@@ -73,12 +73,23 @@ public:
 			GLCALL(glTexImage3D(type, toGive.level, format, toGive.width, toGive.height, toGive.depth, 0, toGive.format, toGive.type, toGive.data));
 			break;
 		}
-		GLCALL(glBindTexture(type, 0));
+	}
+	void GenerateMipMaps(){
+		GLCALL(glBindTexture(type, buffer));
+		GLCALL(glGenerateMipmap(type));
+	}
+	void MakeActive(unsigned int slot){
+		GLCALL(glBindTexture(type, buffer));
+		if(slot < GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS){
+			boundTo = GL_TEXTURE0 + slot;
+			GLCALL(glActiveTexture(boundTo));
+		}
 	}
 private:
 	TexType type;
 	GLint	format;
 	GLuint buffer;
+	int boundTo;
 	
 };
 
