@@ -103,6 +103,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UniformBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +117,8 @@
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="MVector.h" />
+    <ClInclude Include="TestCube.h" />
+    <ClInclude Include="TestScene.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UniformBufferObject.h" />
     <ClInclude Include="VertexInfo.h" />
