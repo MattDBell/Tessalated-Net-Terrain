@@ -41,10 +41,22 @@ public:
 
 	void GenerateMipMaps();
 	void MakeActive(unsigned int slot);
+	void GenerateMipMaps(){
+		GLCALL(glBindTexture(type, buffer));
+		GLCALL(glGenerateMipmap(type));
+	}
+	void MakeActive(unsigned int slot){
+		GLCALL(glBindTexture(type, buffer));
+		if(slot < GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS){
+			boundTo = GL_TEXTURE0 + slot;
+			GLCALL(glActiveTexture(boundTo));
+		}
+	}
 private:
 	TexType type;
 	GLint	format;
 	GLuint buffer;
+	int boundTo;
 	
 };
 
