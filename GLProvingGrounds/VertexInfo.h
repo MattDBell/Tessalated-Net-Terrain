@@ -28,6 +28,23 @@ struct VertexInfo{
 		U_GL_DYNAMIC_COPY		= 0x88EA
 	};
 
+	
+
+	void Set(	char* name, bool isArrayBuffer, unsigned int dataBufferSize, void * dataBufferPtr, Usage usage,
+				int  elementIndex, int sizePerVertexAttrib, DataType type, bool isNormalized, int stride, void* offset){
+		this->name = name;
+		bIsArrayBuffer = isArrayBuffer;
+		this->dataBufferSize = dataBufferSize;
+		dataBuffer = std::shared_ptr<void>(dataBufferPtr);
+		this->usage = usage;
+		this->iElementIndex = elementIndex;
+		this->sizePerVertexAttrib = sizePerVertexAttrib;
+		this->type = type;
+		this->bIsNormalized = isNormalized;
+		this->stride = stride;
+		this->pointer = offset;
+	}
+
 	char*			name;
 
 	//Bind Buffer Variables

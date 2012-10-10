@@ -2,7 +2,7 @@
 #include "GraphicsComponent.h"
 #include <ctime>
 #include "Input.h"
-
+#include "TestScene.h"
 //Test CPP
 GraphicsContext graphics;
 bool running = true;
@@ -71,7 +71,7 @@ bool createWindow(LPCWSTR title, int width, int height){
 int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					LPSTR lpCmdLine, int nCmdShow){
 	MSG msg;
-
+	TestScene scene;
 	char *orig = "OpenGL Proving Grounds";
 	size_t origsize = strlen(orig) + 1;
 	const size_t newsize = 100;
@@ -97,7 +97,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				DispatchMessage(&msg);
 			}
 		}
-		graphics.Render();
+		graphics.RenderPass(0, NULL, scene.cam);
 		end = std::clock();
 		deltaTime = (float)(end- beginning) / CLOCKS_PER_SEC;
 	}
