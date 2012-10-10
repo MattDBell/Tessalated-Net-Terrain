@@ -28,53 +28,19 @@ public:
 		void*		data;
 	};
 
+	Texture(TexType t, GLint f);
+	void SetStorage(GLsizei width, GLsizei height, GLsizei depth, GLint levels);
+	void GiveData(TexData toGive);
 	
-	Texture(TexType t, GLint f)
-		:type(t), format(f)
-	{
-		GLCALL(glGenTextures(1, &buffer));
-	}
-	void SetStorage(GLsizei width, GLsizei height, GLsizei depth, GLint levels){
-		switch(type){
-			case TT_GL_TEXTURE_1D:
-				GLCALL(glTexStorage1D(type, levels, format, width));
-				break;
-			case TT_GL_TEXTURE_2D:
-			case TT_GL_TEXTURE_1D_ARRAY:
-			case TT_GL_TEXTURE_RECTANGLE:
-			case TT_GL_TEXTURE_CUBE_MAP:
-				GLCALL(glTexStorage2D(type, levels, format, width, height));
-				break;
+	void SetParamFloat			(GLenum	pName, GLfloat		param);
+	void SetParamInt			(GLenum	pName, GLint		param);	
+	void SetParamFloatVector	(GLenum	pName, GLfloat*		param);
+	void SetParamFloatVector	(GLenum	pName, GLint*		param);
+	void SetParamIntVector		(GLenum	pName, GLint*		param);
+	void SetParamIntVector		(GLenum	pName, GLuint*		param);
 
-			case TT_GL_TEXTURE_3D:
-			case TT_GL_TEXTURE_2D_ARRAY:
-			case TT_GL_TEXTURE_CUBE_MAP_ARRAY:
-				GLCALL(glTexStorage3D(type, levels, format, width, height, depth));
-				break;
-		}
-	}
-	void GiveData(TexData toGive){
-		GLCALL(glBindTexture(type, buffer));
-		switch(type){
-		case TT_GL_TEXTURE_1D:
-			GLCALL(glTexImage1D(type, toGive.level, format, toGive.width, 0, toGive.format, toGive.type, toGive.data));
-			break;
-		case TT_GL_TEXTURE_2D:
-		case TT_GL_TEXTURE_1D_ARRAY:
-		case TT_GL_TEXTURE_RECTANGLE:
-			GLCALL(glTexImage2D(type, toGive.level, format, toGive.width, toGive.height, 0, toGive.format, toGive.type, toGive.data));
-			break;
-		case TT_GL_TEXTURE_CUBE_MAP:
-			GLCALL(glTexImage2D(toGive.target, toGive.level, format, toGive.width, toGive.height, 0, toGive.format, toGive.type, toGive.data));
-			break;
-		case TT_GL_TEXTURE_3D:
-		case TT_GL_TEXTURE_2D_ARRAY:
-		case TT_GL_TEXTURE_CUBE_MAP_ARRAY:
-			GLCALL(glTexImage3D(type, toGive.level, format, toGive.width, toGive.height, toGive.depth, 0, toGive.format, toGive.type, toGive.data));
-			break;
-		}
-		GLCALL(glBindTexture(type, 0));
-	}
+	void GenerateMipMaps();
+	void MakeActive(unsigned int slot);
 private:
 	TexType type;
 	GLint	format;
