@@ -1,19 +1,11 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-
+//Refactor to be POD with no index
 template <int ROWS>
 struct MVector{
 	//static_assert(ROWS>0, "ROWS Must be a positive non-zero");
-private:
-	
 	float values[ROWS];
-	int index;
-public:
-	MVector();
-	MVector(float fillOrFirst);
-	~MVector();
-
 	static MVector<ROWS> Invalid();
 	bool isInvalid();
 
@@ -35,11 +27,7 @@ public:
 	MVector<ROWS>	operator-(const MVector<ROWS> &rhs);
 	MVector<ROWS>	operator*(float rhs);
 	MVector<ROWS>	operator/(float rhs);
-	MVector<ROWS>&	operator=(const MVector<ROWS> &rhs);
-	MVector<ROWS>&	operator+= (const MVector<ROWS> &rhs);
-	MVector<ROWS>&	operator-= (const MVector<ROWS> &rhs);
 	MVector<ROWS>&  operator()(float inBrackets);
-	float			operator[](int index);
 	
 	
 	bool			operator==(const MVector<ROWS> &rhs);

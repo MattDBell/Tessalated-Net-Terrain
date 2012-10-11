@@ -83,7 +83,7 @@ void Matrix<ROWS, COLUMNS>::SetRow(int row, MVector<COLUMNS> values){
 	if(row >= ROWS || row < 0)
 		*this = Matrix<ROWS, COLUMNS>::Invalid();
 	for(int i = 0; i < COLUMNS; ++i){
-		this->values[i * ROWS +row] = values[i];
+		this->values[i * ROWS +row] = values.GetValue(i);
 	}
 }
 template<int ROWS, int COLUMNS>
@@ -91,7 +91,7 @@ void Matrix<ROWS, COLUMNS>::SetColumn(int column, MVector<ROWS> values){
 	if(column >= COLUMNS || column < 0)
 		*this = Invalid();
 	for(int i = 0; i < ROWS; ++i){
-		this->values[ROWS * column + i] = values[i];
+		this->values[ROWS * column + i] = values.GetValue(i);
 	}
 }
 

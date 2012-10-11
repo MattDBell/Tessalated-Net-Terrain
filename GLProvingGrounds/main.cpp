@@ -71,7 +71,7 @@ bool createWindow(LPCWSTR title, int width, int height){
 int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					LPSTR lpCmdLine, int nCmdShow){
 	MSG msg;
-	TestScene scene;
+	TestScene*  scene = NULL;
 	char *orig = "OpenGL Proving Grounds";
 	size_t origsize = strlen(orig) + 1;
 	const size_t newsize = 100;
@@ -82,6 +82,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	createWindow(wcstring, 500, 500);
 
 	graphics.ResizeWindow(500, 500);
+	scene = new TestScene(&graphics);
 	std::clock_t beginning;
 	std::clock_t end;
 	float deltaTime = 0.0f;
@@ -94,13 +95,14 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				break;
 			default:
 				TranslateMessage(&msg);
+				graphics.RenderAll();
 				DispatchMessage(&msg);
 			}
 		}
-		graphics.RenderPass(0, NULL, scene.cam);
+		//graphics.RenderPass(0, NULL, scene->cam);
 		end = std::clock();
 		deltaTime = (float)(end- beginning) / CLOCKS_PER_SEC;
 	}
-
+	delete scene;
 	return (int) msg.wParam;
 }

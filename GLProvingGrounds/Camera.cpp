@@ -2,7 +2,12 @@
 #include <cmath>
 
 
+UniformBufferObject<Camera::cameraMatrices>* Camera::cameraUBO = NULL;
+
 Camera::Camera(){
+	if(cameraUBO == NULL){
+		cameraUBO = new UniformBufferObject<Camera::cameraMatrices>();
+	}
 	matrices.view = Matrix<4, 4>::Identity();
 	matrices.proj = Matrix<4, 4>::Identity();
 
@@ -15,10 +20,16 @@ const Matrix<4, 4>& Camera::GetView(){
 const Matrix<4, 4>& Camera::GetProj(){
 	return matrices.proj;
 }
-void Camera::LookAt(MVector<3> position, MVector<3> target, MVector<3> Up){
+void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 	this->position = position;
 	
-	
+	static MVector<4> lastRow;
+	static bool firstRun = true;
+	if(firstRun){
+		float arr[] = {0, 0, 0, 1};
+		lastRow.SetValues(arr);
+		firstRun = false;
+	}
 	//Used to ease inverting
 	Matrix<4, 4> orientation;
 	Matrix<4, 4> translation;
@@ -32,7 +43,7 @@ void Camera::LookAt(MVector<3> position, MVector<3> target, MVector<3> Up){
 	
 	//Gram-Schmidt
 	MVector<3> projection = forward * (up.Dot(forward));
-	up -= projection;
+	up = up - projection;
 	up.Normalize();
 	//Gram-Schmidt, considered doing it again to ensure precision
 	//proj = forward * (up.Dot(forward));
@@ -49,7 +60,7 @@ void Camera::LookAt(MVector<3> position, MVector<3> target, MVector<3> Up){
 																//SetColumn sets the values of the column to those of the MVector
 	orientation.SetColumn(1, up.IncreasedDimensions<1>(0));
 	orientation.SetColumn(2, (forward*-1).IncreasedDimensions<1>(0));
-	orientation.SetColumn(3, MVector<4>(0)(0)(0)(1));	//This is a very cheat way to have a variadic constructor
+	orientation.SetColumn(3, lastRow);	//This is a very cheat way to have a variadic constructor
 														//The MVector is first created with all the values set to
 														//the first argument (0).  The operator() keeps track of
 														//where it should place the next value and then places it
@@ -57,21 +68,16 @@ void Camera::LookAt(MVector<3> position, MVector<3> target, MVector<3> Up){
 	
 	translation = Matrix<4, 4>::Identity();
 	translation.SetColumn(3, position.IncreasedDimensions<1>(1)); // translation Matrix, simple enough
-	MVector<4> thereAndBack = MVector<4>(1)(1)(1)(1);
+	
 	world = translation.multiply(orientation); // This is the cameras object - world matrix
-	thereAndBack = world.multiply(thereAndBack);
 
 	translation.SetColumn(3, (position * -1).IncreasedDimensions<1>(1));  // Invert the translation matrix
 
 	matrices.view = orientation.Transposed().multiply(translation); // Orientation matrix inverse == it's transpose.  Then reverse order
-	thereAndBack = view.multiply(thereAndBack);
-	thereAndBack = world.multiply(thereAndBack);
-	thereAndBack = view.multiply(thereAndBack);
-	Matrix<4, 4> id = world.multiply(view);
 }
-void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<2> aspectRatio){
+void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<2> &aspectRatio){
 	zoomY = 1/tan(fieldOfViewY/2);
-	float zoomX = zoomY * aspectRatio[1] /aspectRatio[0];
+	float zoomX = zoomY * aspectRatio.GetValue(1) /aspectRatio.GetValue(0);
 	
 	
 	float projValues[16] = {	zoomX,	0,		0,		0,   
@@ -83,5 +89,5 @@ void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<
 
 }
 void Camera::SetCurrent(){
-	Camera::cameraUBO.Update(&matrices);
+	Camera::cameraUBO->Update(&matrices);
 }

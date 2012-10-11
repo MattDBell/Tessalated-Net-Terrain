@@ -5,16 +5,8 @@
 #include <math.h>
 #include <limits>
 
-template <int ROWS>
-MVector<ROWS>::MVector()
-	:index(0)
-{
-	for(int i = 0; i < ROWS; ++i)
-		values[i] = 0.0f;
-}
-template <int ROWS>
-MVector<ROWS>::~MVector(){
-}
+
+
 
 template<int ROWS>
 float * MVector<ROWS>::GetValues(){
@@ -27,13 +19,7 @@ float * MVector<ROWS>::GetValues(){
 //	MVector<ROWS>::MVector<next, nextvalues>();
 //}
 
-template <int ROWS>
-MVector<ROWS>::MVector(float fill)
-	:index(1)
-{
-	for(int i = 0; i < ROWS; ++i)
-		values[i] = fill;
-}
+
 
 template <int ROWS>
 MVector<ROWS>& MVector<ROWS>::operator()(float inBrackets){
@@ -43,10 +29,7 @@ MVector<ROWS>& MVector<ROWS>::operator()(float inBrackets){
 
 	return *this;
 }
-template <int ROWS>
-float MVector<ROWS>::operator[](int index){
-	return this->GetValue(index);
-}
+
 template <int ROWS>
 float			MVector<ROWS>::GetValue(int i) const {
 	if(i >= ROWS || i < 0)
@@ -128,27 +111,6 @@ MVector<ROWS>	MVector<ROWS>::operator*(float rhs){
 template <int ROWS>
 MVector<ROWS>	MVector<ROWS>::operator/(float rhs){
 	return *this * (1/rhs);
-}
-template <int ROWS>
-MVector<ROWS>&	MVector<ROWS>::operator=(const MVector<ROWS> &rhs){
-	if( this->is(rhs))
-		return *this;
-	for(int i = 0; i < ROWS; ++i)
-		values[i] = rhs.values[i];
-	return *this;
-}
-template <int ROWS>
-MVector<ROWS>&	MVector<ROWS>::operator+= (const MVector<ROWS> &rhs){
-	MVector<ROWS> sum = *this + rhs;
-	*this = sum;
-	return *this;
-}
-
-template <int ROWS>
-MVector<ROWS>&	MVector<ROWS>::operator-= (const MVector<ROWS> &rhs){
-	MVector<ROWS> difference = *this - rhs;
-	*this = difference;
-	return *this;
 }
 
 template <int ROWS>

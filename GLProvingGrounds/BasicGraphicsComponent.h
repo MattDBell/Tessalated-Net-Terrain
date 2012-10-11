@@ -7,7 +7,7 @@
 #include "ShaderProgram.h"
 #include "VertexInfo.h"
 
-class BasicGraphicsComponent : GraphicsComponent{
+class BasicGraphicsComponent : public GraphicsComponent{
 private:
 	BasicGraphicsComponent();
 protected:

@@ -2,7 +2,7 @@
 #include <fstream>
 #include "Macros.h"
 
-
+ShaderProgram * ShaderProgram::current = NULL;
 ShaderProgram::ShaderProgram(){
 }
 

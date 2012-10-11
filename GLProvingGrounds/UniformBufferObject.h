@@ -4,49 +4,46 @@
 #include <vector>
 
 struct UBOinterface{
-	virtual void BindToShader(unsigned int programBuffer);
+	virtual void BindToShader(unsigned int programBuffer) = 0;
 };
 
 struct UBOStatics{
 private:
 	static UBOStatics * instance;
+	UBOStatics()
+		:index(0)
+	{}
 public:
-	UBOStatics* Get(){
-		if(instance == NULL)
-			UBOStatics::instance = new UBOStatics();
-		return instance;
-	}
+	static UBOStatics* Get();
 	int index;
 	std::vector<UBOinterface *> buffers;
-	void BindAll(unsigned int program){
-		for(auto it = buffers.begin(); it != buffers.end(); it++)
-			(*it)->BindToShader(program);
-	}
+	std::vector<UBOinterface *>& GetBuffers();
+	void BindAll(unsigned int program);
 };
 
 template <class dataStructure>
 struct UniformBufferObject : public UBOinterface{
-	static unsigned int currIndex;
 	unsigned int		uBOBindingIndex;
 	unsigned int		uboIndex;
 	char *				name;
 	UniformBufferObject(){
 		
-		currIndex = UBOStatics::Get()->Index++;
-		UBOStatics::Get()->buffers.push_back((void *)this);
+		uBOBindingIndex = UBOStatics::Get()->index++;
+		UBOStatics::Get()->buffers.push_back(this);
 		Initialize();
 	}
 	~UniformBufferObject(){
 		bool found = false;
+		std::vector<UBOinterface *> allBuffers = UBOStatics::Get()->GetBuffers();
 		for(auto it = allBuffers.begin(); it != allBuffers.end(); it++){
 			if((*it)  == this){
-				(*it) = allBuffers[allBuffers.size -1];
+				(*it) = allBuffers[allBuffers.size() -1];
 				found = true;
 				break;
 			}
 		}
 		if(found)
-			allBuffers.pop_back;
+			allBuffers.pop_back();
 		if(name != NULL){
 			delete [] name;
 			name = NULL;

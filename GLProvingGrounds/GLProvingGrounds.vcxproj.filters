@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="BasicGraphicsComponent.cpp" />
+    <ClCompile Include="BoolArray.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GraphicsComponent.cpp" />
+    <ClCompile Include="GraphicsContext.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathDefinedFunction.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MVector.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="UniformBufferObject.cpp" />
+    <ClCompile Include="Macros.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BasicGraphicsComponent.h" />
+    <ClInclude Include="BoolArray.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="GraphicsComponent.h" />
+    <ClInclude Include="GraphicsContext.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Macros.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="MVector.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="UniformBufferObject.h" />
+    <ClInclude Include="VertexInfo.h" />
+    <ClInclude Include="TestCube.h">
+      <Filter>Testing</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Testing</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Testing">
+      <UniqueIdentifier>{b7cf5395-7b49-4779-9542-f255c24b0c80}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

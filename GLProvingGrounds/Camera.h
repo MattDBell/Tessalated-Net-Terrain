@@ -7,7 +7,7 @@ class Camera{
 		Matrix<4, 4> view;
 		Matrix<4, 4> proj;
 	};
-	static UniformBufferObject<cameraMatrices> cameraUBO;
+	static UniformBufferObject<cameraMatrices>* cameraUBO;
 	cameraMatrices matrices;
 	Matrix<4, 4> world;
 
@@ -22,8 +22,8 @@ class Camera{
 	float zoomY, nearC, farC;
 public:
 	Camera();
-	void LookAt(MVector<3> position, MVector<3> target, MVector<3> Up);
-	void SetProj(float nearClip, float farClip, float fieldOfView, MVector<2> aspectRatio);
+	void LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up);
+	void SetProj(float nearClip, float farClip, float fieldOfView, MVector<2> &aspectRatio);
 	const Matrix<4, 4>& GetView();
 	const Matrix<4, 4>& GetProj();
 	void SetCurrent();
