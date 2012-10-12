@@ -41,20 +41,19 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 
 	if(!SetPixelFormat(hdc, nPixelFormat, &pfd))
 		return false;
-
 	//Create a temporary default GL Context in order to create a specific context
 	HGLRC tempOpenGLContext = wglCreateContext(hdc);
 	wglMakeCurrent(hdc, tempOpenGLContext);
 
 	//Ensure Glew is working
-	GLenum error = glewInit();
-	if(error != GLEW_OK)
-		return false;
+	//GLenum error = GLCALL(glewInit());
+	//if(error != GLEW_OK)
+	//	return false;
 
 	
 	int attributes[] = {
 		WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-		WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+		WGL_CONTEXT_MINOR_VERSION_ARB, 2,
 		WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 		0
 	};
@@ -63,12 +62,19 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	//Current, else make pointer to context = temporary
 	if(wglewIsSupported("WGL_ARB_create_context") == 1){
 		hrc = wglCreateContextAttribsARB(hdc, NULL, attributes);
+		CheckErrors();
 		wglMakeCurrent(NULL, NULL);
 		wglDeleteContext(tempOpenGLContext);
 		wglMakeCurrent(hdc, hrc);
+		CheckErrors();
+
 	} else {
 		hrc = tempOpenGLContext;
 	}
+	
+	GLenum error = GLCALL(glewInit());
+	if(error != GLEW_OK)
+		return false;
 
 	return true;
 }
@@ -79,9 +85,10 @@ void GraphicsContext::ResizeWindow(int w, int h){
 }
 
 void GraphicsContext::RenderPass(int pass, ShaderProgram* defaultShader, Camera* cam){
-	glViewport(0,0, windowWidth, windowHeight);
+
+	GLCALL(glViewport(0,0, windowWidth, windowHeight));
 	//Set RenderTarget
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	GLCALL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 	//Need a constant buffer for Camera shtuff
 	if(cam != NULL)
 		cam->SetCurrent();

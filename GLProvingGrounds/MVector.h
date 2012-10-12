@@ -14,8 +14,8 @@ struct MVector{
 	void SetValue(int index, float to);
 //	void SetValues(float  arr[]);
 	void SetValues(float  * const arr );
-	float Dot(MVector<ROWS> &other);
-	MVector<ROWS> Cross(MVector<ROWS> &other);
+	float Dot(const MVector<ROWS> &other);
+	MVector<ROWS> Cross(const MVector<ROWS> &other);
 	
 	MVector<ROWS> Normalized();
 	void Normalize();
@@ -25,9 +25,9 @@ struct MVector{
 	
 	MVector<ROWS>	operator+(const MVector<ROWS> &rhs);
 	MVector<ROWS>	operator-(const MVector<ROWS> &rhs);
-	MVector<ROWS>	operator*(float rhs);
-	MVector<ROWS>	operator/(float rhs);
-	MVector<ROWS>&  operator()(float inBrackets);
+	MVector<ROWS>	operator*(const float rhs);
+	MVector<ROWS>	operator/(const float rhs);
+	MVector<ROWS>&  operator()(const float inBrackets);
 	
 	
 	bool			operator==(const MVector<ROWS> &rhs);

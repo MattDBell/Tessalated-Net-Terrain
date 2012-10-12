@@ -22,8 +22,6 @@ void BasicGraphicsComponent::Initialize(){
 		vInfos[i].BindAttribLocation(shader->GetBuffer());
 	}
 	
-	//Link the shaders into a program
-	shader->Link();
 	//Make is current
 	shader->Bind();
 	
@@ -48,12 +46,5 @@ void BasicGraphicsComponent::EntitySpecificShaderSetup(){
 void BasicGraphicsComponent::Render(){
 	shader->Bind();
 	
-	for(int i = 0; i < numVInfo; ++i){
-		vInfos[i].Enable();
-	}
-
-	EntitySpecificShaderSetup();
-	glBindVertexArray(vao_ID);
-	glDrawArrays(primMode, 0, numVerts);
-	glBindVertexArray(0);
+	GraphicsComponent::Render();
 }

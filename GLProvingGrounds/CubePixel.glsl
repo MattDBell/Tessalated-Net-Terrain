@@ -1,4 +1,4 @@
-#version 130
+#version 400
 
 in vec4 ocolor;
 out vec4 outColor;

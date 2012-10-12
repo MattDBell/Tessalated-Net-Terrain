@@ -161,7 +161,7 @@ Matrix<ROWS, COLUMNS>		Matrix<ROWS, COLUMNS>::divide(float scalar) const{
 
 template<int ROWS, int COLUMNS>
 Matrix<COLUMNS, ROWS>		Matrix<ROWS, COLUMNS>::Transposed() const{
-	Matrix<COLUMNS, ROWS> ret;
+	Matrix<COLUMNS, ROWS> ret = Matrix<COLUMNS, ROWS>();
 	for (int i = 0; i < COLUMNS; ++i){
 		ret.SetRow(i, this->GetColumn(i));
 	}
@@ -173,7 +173,7 @@ template<int ROWS, int COLUMNS>
 Matrix<ROWS, COLUMNS>		Matrix<ROWS, COLUMNS>::Inversed() const{//HOLD OFF FO' NOW
 	if(ROWS != COLUMNS)
 		return Matrix<ROWS, COLUMNS>::Invalid();
-	Matrix ret;
+	Matrix ret= Matrix<COLUMNS, ROWS>();
 
 	float inverse[ROWS*COLUMNS] = {0};
 	for(int i = 0; i < ROWS * COLUMNS; i += COLUMNS + 1)
@@ -186,7 +186,7 @@ Matrix<ROWS, COLUMNS>		Matrix<ROWS, COLUMNS>::Inversed() const{//HOLD OFF FO' NO
 }
 template<int ROWS, int COLUMNS>
 Matrix<ROWS, COLUMNS>		Matrix<ROWS, COLUMNS>::operator+( const Matrix<ROWS, COLUMNS> &rhs) const{
-	Matrix<ROWS, COLUMNS> ret;
+	Matrix<ROWS, COLUMNS> ret= Matrix<COLUMNS, ROWS>();
 	float[ROWS* COLUMNS] newValues;
 	for(int i = 0; i < ROWS* COLUMNS; ++i)
 		newValues[i] = values[i] + rhs.values[i];
@@ -196,7 +196,7 @@ Matrix<ROWS, COLUMNS>		Matrix<ROWS, COLUMNS>::operator+( const Matrix<ROWS, COLU
 
 template<int ROWS, int COLUMNS>
 Matrix<ROWS, COLUMNS>		Matrix<ROWS, COLUMNS>::operator-( const Matrix<ROWS, COLUMNS> &rhs) const{
-	Matrix<ROWS, COLUMNS> ret;
+	Matrix<ROWS, COLUMNS> ret= Matrix<COLUMNS, ROWS>();
 	float[ROWS* COLUMNS] newValues;
 	for(int i = 0; i < ROWS* COLUMNS; ++i)
 		newValues[i] = values[i] - rhs.values[i];

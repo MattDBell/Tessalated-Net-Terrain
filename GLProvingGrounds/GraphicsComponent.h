@@ -25,19 +25,18 @@ public:
 
 private:
 	GraphicsComponent();
+	GraphicsComponent& operator=(GraphicsComponent& rhs);
 protected:
 	unsigned int	vao_ID;
 	VertexInfo		* vInfos;
 	const int		numVInfo;
 	const int		numVerts;
 	PrimitiveMode	primMode;
-	
 public:
 	GraphicsComponent(VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode);
 	virtual ~GraphicsComponent();
 	virtual void Initialize();
 	virtual void EntitySpecificShaderSetup();
 	virtual void Render();
-
 };
 #endif //DRAWNENTITY_H

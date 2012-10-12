@@ -43,6 +43,7 @@ struct VertexInfo{
 		this->bIsNormalized = isNormalized;
 		this->stride = stride;
 		this->pointer = offset;
+
 	}
 
 	char*			name;

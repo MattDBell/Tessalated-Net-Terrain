@@ -24,6 +24,9 @@ void CheckErrors(){
 			case GL_OUT_OF_MEMORY:
 				error = "GL_OUT_OF_MEMORY";
 				break;
+			default:
+				error = "UNKNOWN";
+				break;
 		}
 		printf(error);
 		result = glGetError();

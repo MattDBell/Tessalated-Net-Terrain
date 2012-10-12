@@ -6,7 +6,7 @@ UniformBufferObject<Camera::cameraMatrices>* Camera::cameraUBO = NULL;
 
 Camera::Camera(){
 	if(cameraUBO == NULL){
-		cameraUBO = new UniformBufferObject<Camera::cameraMatrices>();
+		cameraUBO = new UniformBufferObject<Camera::cameraMatrices>("CamMats");
 	}
 	matrices.view = Matrix<4, 4>::Identity();
 	matrices.proj = Matrix<4, 4>::Identity();

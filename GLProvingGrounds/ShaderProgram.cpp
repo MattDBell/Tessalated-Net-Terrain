@@ -1,6 +1,7 @@
 #include "ShaderProgram.h"
 #include <fstream>
 #include "Macros.h"
+#include "UniformBufferObject.h"
 
 ShaderProgram * ShaderProgram::current = NULL;
 ShaderProgram::ShaderProgram(){
@@ -22,6 +23,7 @@ int ShaderProgram::Initialize( char * vertex, char * tessalationControl, char *t
 		LoadShaderPortion(pixel, GL_FRAGMENT_SHADER, PIXEL) &&
 		Link() != GL_FALSE))
 	{
+		UBOStatics::Get()->BindAll(buffer);
 		return 1;
 	}
 
@@ -44,7 +46,7 @@ int ShaderProgram::LoadShaderPortion(char * source, int ShaderType, int sBIndex)
 			return 0;
 		}
 		GLCALL(glAttachShader(buffer, shaderBuffers[sBIndex]));
-		GLCALL(glDeleteShader(shaderBuffers[sBIndex]));
+		//GLCALL(glDeleteShader(shaderBuffers[sBIndex]));
 		free((void*)source);
 	}
 	return 1;
@@ -102,7 +104,7 @@ char * ShaderProgram::LoadSource(char * fileName){
 	return ret;
 }
 
-void ShaderProgram::Update(float deltaTime){
+void ShaderProgram::Update(float){
 	return;
 }
 

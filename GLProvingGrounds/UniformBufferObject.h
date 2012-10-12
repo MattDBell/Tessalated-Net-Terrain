@@ -11,7 +11,7 @@ struct UBOStatics{
 private:
 	static UBOStatics * instance;
 	UBOStatics()
-		:index(0)
+		:index(1)
 	{}
 public:
 	static UBOStatics* Get();
@@ -26,8 +26,10 @@ struct UniformBufferObject : public UBOinterface{
 	unsigned int		uBOBindingIndex;
 	unsigned int		uboIndex;
 	char *				name;
-	UniformBufferObject(){
-		
+	UniformBufferObject(char * name){
+		int size = strlen(name) + 1;
+		this->name = (char*)malloc(size);
+		strcpy_s(this->name, size, name);
 		uBOBindingIndex = UBOStatics::Get()->index++;
 		UBOStatics::Get()->buffers.push_back(this);
 		Initialize();
@@ -45,8 +47,7 @@ struct UniformBufferObject : public UBOinterface{
 		if(found)
 			allBuffers.pop_back();
 		if(name != NULL){
-			delete [] name;
-			name = NULL;
+			free(name);
 		}
 		GLCALL(glDeleteBuffers(1, &uboIndex));
 	}
@@ -66,7 +67,8 @@ struct UniformBufferObject : public UBOinterface{
 	}
 	void Update(dataStructure* data){
 		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
-		GLCALL(glBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), data, GL_STREAM_DRAW));
+		int i = sizeof(dataStructure);
+		GLCALL(glBufferData(GL_UNIFORM_BUFFER, i, data, GL_STREAM_DRAW));
 	}
 };
 #endif //UNIFORMBUFFEROBJECT_H

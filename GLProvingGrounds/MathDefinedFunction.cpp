@@ -53,8 +53,8 @@ Matrix<4, 4>	Translate(MVector<4> translation){
 }
 
 template<>
-MVector<3> MVector<3>::Cross(MVector<3> &rhs){
-	MVector<3> ret;
+MVector<3> MVector<3>::Cross(const MVector<3> &rhs){
+	MVector<3> ret = MVector<3>();
 	for(int i = 0; i < 3; ++i){
 		ret.SetValue(i,GetValue((i+1)%3) * rhs.GetValue((i+2)%3) - GetValue((i+2)%3) * rhs.GetValue((i+1)%3));
 	}

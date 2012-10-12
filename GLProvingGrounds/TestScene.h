@@ -33,12 +33,14 @@ struct TestScene{
 		context->RegisterCamera(cam, 0);
 
 		cube = TestCube::CreateCube();
+		cube->Initialize();
 		context->RegisterGraphComp(cube, 0);
 	}
 	~TestScene(){
 		delete cam;
+		delete cube;
 	}
-	void Update(float dT){
+	void Update(float){
 		//if(Input::Get()->GetKey('A')){
 		//	//MoveCamera
 		//}

@@ -5,9 +5,6 @@
 #include <math.h>
 #include <limits>
 
-
-
-
 template<int ROWS>
 float * MVector<ROWS>::GetValues(){
 	return &values[0];
@@ -22,7 +19,7 @@ float * MVector<ROWS>::GetValues(){
 
 
 template <int ROWS>
-MVector<ROWS>& MVector<ROWS>::operator()(float inBrackets){
+MVector<ROWS>& MVector<ROWS>::operator()(const float inBrackets){
 	if(index >= ROWS)
 		return *this = MVector<ROWS>::Invalid();
 	values[index++] = inBrackets;
@@ -56,7 +53,7 @@ void			MVector<ROWS>::SetValues(float arr[]){
 //}
 
 template <int ROWS>
-float			MVector<ROWS>::Dot(MVector<ROWS> &other){
+float			MVector<ROWS>::Dot(const MVector<ROWS> &other){
 	float ret = 0.0f;
 	for(int i = 0; i < ROWS; ++i)
 	{
@@ -89,27 +86,27 @@ float			MVector<ROWS>::Length(){
 
 template <int ROWS>
 MVector<ROWS>	MVector<ROWS>::operator+(const MVector<ROWS> &rhs){
-	MVector ret;
+	MVector ret = MVector();
 	for(int i = 0; i < ROWS; ++i)
 		ret.values[i] = this->values[i] + rhs.values[i];
 	return ret;
 }
 template <int ROWS>
 MVector<ROWS>	MVector<ROWS>::operator-(const MVector<ROWS> &rhs){
-	MVector ret;
+	MVector ret  = MVector();
 	for(int i = 0; i < ROWS; ++i)
 		ret.values[i] = this->values[i] - rhs.values[i];
 	return ret;
 }
 template <int ROWS>
-MVector<ROWS>	MVector<ROWS>::operator*(float rhs){
-	MVector ret;
+MVector<ROWS>	MVector<ROWS>::operator*(const float rhs){
+	MVector ret = MVector();
 	for(int i = 0; i < ROWS; ++i)
 		ret.values[i] = this->values[i] *rhs;
 	return ret;
 }
 template <int ROWS>
-MVector<ROWS>	MVector<ROWS>::operator/(float rhs){
+MVector<ROWS>	MVector<ROWS>::operator/(const float rhs){
 	return *this * (1/rhs);
 }
 
@@ -133,18 +130,20 @@ bool			MVector<ROWS>::is(const MVector<ROWS> &rhs){
 	return this == &rhs;
 }
 template<int ROWS>
-MVector<ROWS> MVector<ROWS>::Cross(MVector<ROWS> &rhs){
+MVector<ROWS> MVector<ROWS>::Cross(const MVector<ROWS> &rhs){
 	return MVector<ROWS>::Invalid();
 }
 template<>
-MVector<3> MVector<3>::Cross(MVector<3> & rhs);
+MVector<3> MVector<3>::Cross(const MVector<3> & rhs);
 
 
 template<int ROWS>
 MVector<ROWS> MVector<ROWS>::Invalid()
 {
-
-	return MVector<ROWS>(std::numeric_limits<float>::quiet_NaN());
+	MVector<ROWS> ret;
+	float values[ROWS] = {std::numeric_limits::signaling_NAN()};
+	ret.SetValues(values);
+	return ret;
 }
 
 template<int ROWS>
