@@ -84,7 +84,9 @@ struct VertexInfo{
 	void Initialize(){
 		Bind();
 		BufferData();
+		Enable();
 		VertexAttribPointer();
+		//
 	}
 
 	void Enable(){
