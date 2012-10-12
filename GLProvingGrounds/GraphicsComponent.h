@@ -37,6 +37,6 @@ public:
 	virtual ~GraphicsComponent();
 	virtual void Initialize();
 	virtual void EntitySpecificShaderSetup();
-	virtual void Render();
+	virtual void Render(int pass);
 };
 #endif //DRAWNENTITY_H

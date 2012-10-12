@@ -4,6 +4,7 @@
 #include "TestCube.h"
 #include "Input.h"
 
+const double PI = 3.14159265;
 
 struct TestScene{
 	
@@ -14,20 +15,15 @@ struct TestScene{
 	
 	TestScene(GraphicsContext * context){
 		cam = new Camera();
-		MVector<3> camStart;
-		MVector<3> upVec;
-		
-		float cStart[] = {0, 2, -10 };
+		MVector<3> camStart = { 0, 2, -10};
+		MVector<3> upVec = {0, 1, 0};
+				
 		float lookAtArr[] = {0, 0, 0};
-		float upArr[] = {0, 1, 0};
-		camStart.SetValues(cStart);
-
-		lookAt.SetValues( lookAtArr) ;
-		upVec.SetValues( upArr);
+		lookAt.SetValues( lookAtArr) ;	
 
 		AspectRatio.SetValue(0, 1);
 		AspectRatio.SetValue(1, 1);
-		cam->SetProj(0.01f, 1000.0f, 45, AspectRatio );
+		cam->SetProj(0.01f, 1000.0f, (float)(45.0f/ 180 * PI) , AspectRatio );
 		cam->LookAt(camStart, lookAt, upVec);
 
 		context->RegisterCamera(cam, 0);
@@ -41,6 +37,7 @@ struct TestScene{
 		delete cube;
 	}
 	void Update(float){
+
 		//if(Input::Get()->GetKey('A')){
 		//	//MoveCamera
 		//}

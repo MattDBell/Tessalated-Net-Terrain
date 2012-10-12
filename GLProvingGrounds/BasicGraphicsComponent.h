@@ -21,7 +21,7 @@ public:
 	virtual ~BasicGraphicsComponent();
 	virtual void Initialize();
 	virtual void EntitySpecificShaderSetup();
-	virtual void Render();
+	virtual void Render(int pass);
 
 };
 #endif //BASICGRAPHICSCOMPONENT_H

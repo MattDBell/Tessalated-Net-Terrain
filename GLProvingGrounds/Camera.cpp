@@ -23,13 +23,8 @@ const Matrix<4, 4>& Camera::GetProj(){
 void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 	this->position = position;
 	
-	static MVector<4> lastRow;
-	static bool firstRun = true;
-	if(firstRun){
-		float arr[] = {0, 0, 0, 1};
-		lastRow.SetValues(arr);
-		firstRun = false;
-	}
+	static MVector<4> lastRow = {0, 0, 0, 1};
+
 	//Used to ease inverting
 	Matrix<4, 4> orientation;
 	Matrix<4, 4> translation;
@@ -60,11 +55,7 @@ void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 																//SetColumn sets the values of the column to those of the MVector
 	orientation.SetColumn(1, up.IncreasedDimensions<1>(0));
 	orientation.SetColumn(2, (forward*-1).IncreasedDimensions<1>(0));
-	orientation.SetColumn(3, lastRow);	//This is a very cheat way to have a variadic constructor
-														//The MVector is first created with all the values set to
-														//the first argument (0).  The operator() keeps track of
-														//where it should place the next value and then places it
-														//there.  Resulting (in this case) in (0, 0, 0, 1)
+	orientation.SetColumn(3, lastRow);	
 	
 	translation = Matrix<4, 4>::Identity();
 	translation.SetColumn(3, position.IncreasedDimensions<1>(1)); // translation Matrix, simple enough
@@ -82,8 +73,8 @@ void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<
 	
 	float projValues[16] = {	zoomX,	0,		0,		0,   
 								0,		zoomY,	0,		0,	
-								0,		0,		(farClip + nearClip)/(farClip-nearClip), 1,
-								0,		0,		(2 * nearClip * farClip) /( nearClip - farClip),	0}; 
+								0,		0,		-(farClip + nearClip)/(farClip-nearClip), -1,
+								0,		0,		(-2 * nearClip * farClip) /( farClip -nearClip ),	0}; 
 	matrices.proj.SetValues(projValues);
 	//proj.Transpose();
 

@@ -14,9 +14,9 @@ public:
 		
 		MVector<3>*	vertices = new MVector<3>[8];
 		for(int i = 0; i < 8; ++i){
-			vertices[i].SetValue(0, (float) ((i & 1) >> 0));
-			vertices[i].SetValue(1, (float) ((i & 2) >> 1));
-			vertices[i].SetValue(2, (float) ((i & 4) >> 2));
+			vertices[i].SetValue(0, (float) ((i & 1) >> 0) - 0.5f);
+			vertices[i].SetValue(1, (float) ((i & 2) >> 1) - 0.5f);
+			vertices[i].SetValue(2, (float) ((i & 4) >> 2) - 0.5f);
 		}
 		//Must be a nice algorithm for this
 		GLuint faces[12 * 3] = {

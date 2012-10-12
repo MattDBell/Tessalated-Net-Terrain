@@ -71,10 +71,12 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	} else {
 		hrc = tempOpenGLContext;
 	}
-	
+	GLCALL(glDisable(GL_CULL_FACE));
 	GLenum error = GLCALL(glewInit());
 	if(error != GLEW_OK)
 		return false;
+
+
 
 	return true;
 }
@@ -96,13 +98,9 @@ void GraphicsContext::RenderPass(int pass, ShaderProgram* defaultShader, Camera*
 		defaultShader->Bind();
 		defaultShaderForPass = defaultShader;
 	}
-	/*
-	We're using spherical coordinates.  Defined by azimuth (similar to Yaw), elevation (similar to Pitch)
-	and distance.
-	*/
 	
 	for( auto it = entitiesPerPass[pass].begin(); it != entitiesPerPass[pass].end(); it++){
-		(*it)->Render();
+		(*it)->Render(pass);
 	}
 	
 	if(pass == numPasses-1)

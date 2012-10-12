@@ -14,6 +14,7 @@ in vec3 Normal;
 out vec4 ocolor;
 
 void main(void){
-	gl_Position =  cMat.proj * cMat.view * model * vec4(VertexPosition, 1.0);
+	gl_Position =  vec4(VertexPosition, 1 );// cMat.proj * cMat.view * model * vec4(VertexPosition, 1.0);
+	//gl_Position /= gl_Position.w;
 	ocolor = vec4(Color, 1.0);
 }

@@ -36,13 +36,14 @@ void GraphicsComponent::Initialize(){
 void GraphicsComponent::EntitySpecificShaderSetup(){
 	return;
 }
-void GraphicsComponent::Render(){
+void GraphicsComponent::Render(int){
 	for(int i = 0; i < numVInfo; ++i){
 		vInfos[i].Enable();
 	}
 
 	EntitySpecificShaderSetup();
 	glBindVertexArray(vao_ID);
-	glDrawArrays(primMode, 0, numVerts);
+	//glDrawArrays(primMode, 0, numVerts);
+	glDrawElements(primMode, 12, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

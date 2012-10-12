@@ -19,14 +19,11 @@ int ShaderProgram::Initialize( char * vertex, char * tessalationControl, char *t
 		LoadShaderPortion(tessalationControl, GL_TESS_CONTROL_SHADER, TESSALATION_CONTROL)&&
 		LoadShaderPortion(tessaltionEvaluation, GL_TESS_EVALUATION_SHADER, TESSALATION_EVALUATION) &&
 		hasShader[TESSALATION_CONTROL] == hasShader[TESSALATION_EVALUATION] &&
-		LoadShaderPortion(geometry, GL_GEOMETRY_SHADER, GEOMETRY&&
-		LoadShaderPortion(pixel, GL_FRAGMENT_SHADER, PIXEL) &&
-		Link() != GL_FALSE))
+		LoadShaderPortion(geometry, GL_GEOMETRY_SHADER, GEOMETRY) &&
+		LoadShaderPortion(pixel, GL_FRAGMENT_SHADER, PIXEL))
 	{
-		UBOStatics::Get()->BindAll(buffer);
 		return 1;
 	}
-
 	return 0;
 
 }
@@ -68,6 +65,7 @@ GLint ShaderProgram::Link(){
 		GLCALL(glDeleteProgram(buffer));
 		return GL_FALSE;
 	}
+	UBOStatics::Get()->BindAll(buffer);
 	return GL_TRUE;
 }
 void ShaderProgram::DebugShader(GLuint buffer){
