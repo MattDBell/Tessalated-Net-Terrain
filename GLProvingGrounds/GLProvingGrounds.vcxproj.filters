@@ -18,7 +18,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicGraphicsComponent.h" />
-    <ClInclude Include="BoolArray.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="GraphicsContext.h" />
@@ -36,6 +35,7 @@
     <ClInclude Include="TestScene.h">
       <Filter>Testing</Filter>
     </ClInclude>
+    <ClInclude Include="BoolArray.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Testing">

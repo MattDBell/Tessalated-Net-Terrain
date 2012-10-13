@@ -24,4 +24,4 @@ public:
 	virtual void Render(int pass);
 
 };
-#endif //BASICGRAPHICSCOMPONENT_H
+#endif //BASICGRAPHICSCOMPONENT_H4

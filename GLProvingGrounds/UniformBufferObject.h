@@ -3,6 +3,8 @@
 #include "Macros.h"
 #include <vector>
 
+#define OFFSETOF(CLASS, MEMBER)  ((char*)&((( CLASS* )0)->MEMBER) - (char*)0 )
+
 struct UBOinterface{
 	virtual void BindToShader(unsigned int programBuffer) = 0;
 };
@@ -44,6 +46,7 @@ struct UniformBufferObject : public UBOinterface{
 				break;
 			}
 		}
+		
 		if(found)
 			allBuffers.pop_back();
 		if(name != NULL){
@@ -52,6 +55,8 @@ struct UniformBufferObject : public UBOinterface{
 		GLCALL(glDeleteBuffers(1, &uboIndex));
 	}
 	void Initialize(){
+		int i = OFFSETOF(UniformBufferObject<int>, uboIndex);
+		printf("%d", i);
 		GLCALL(glGenBuffers(1, &uboIndex));
 		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
 		GLCALL(glBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), NULL, GL_STREAM_DRAW));
@@ -67,8 +72,7 @@ struct UniformBufferObject : public UBOinterface{
 	}
 	void Update(dataStructure* data){
 		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
-		int i = sizeof(dataStructure);
-		GLCALL(glBufferData(GL_UNIFORM_BUFFER, i, data, GL_STREAM_DRAW));
+		GLCALL(glBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), data, GL_STREAM_DRAW));
 	}
 };
 #endif //UNIFORMBUFFEROBJECT_H

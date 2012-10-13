@@ -23,7 +23,7 @@ const Matrix<4, 4>& Camera::GetProj(){
 void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 	this->position = position;
 	
-	static MVector<4> lastRow = {0, 0, 0, 1};
+	static MVector<4> lastColumn = {0, 0, 0, 1};
 
 	//Used to ease inverting
 	Matrix<4, 4> orientation;
@@ -55,7 +55,7 @@ void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 																//SetColumn sets the values of the column to those of the MVector
 	orientation.SetColumn(1, up.IncreasedDimensions<1>(0));
 	orientation.SetColumn(2, (forward*-1).IncreasedDimensions<1>(0));
-	orientation.SetColumn(3, lastRow);	
+	orientation.SetColumn(3, lastColumn);	
 	
 	translation = Matrix<4, 4>::Identity();
 	translation.SetColumn(3, position.IncreasedDimensions<1>(1)); // translation Matrix, simple enough
@@ -65,6 +65,9 @@ void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 	translation.SetColumn(3, (position * -1).IncreasedDimensions<1>(1));  // Invert the translation matrix
 
 	matrices.view = orientation.Transposed().multiply(translation); // Orientation matrix inverse == it's transpose.  Then reverse order
+	//Matrix<4, 4> v = {1, 0, 0, 0, 0, 1, 0 ,0, 0,0, 1, 0, 0, 0, 0, 1}; 
+	//matrices.view = v;
+	matrices.view.Transpose();
 }
 void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<2> &aspectRatio){
 	zoomY = 1/tan(fieldOfViewY/2);
@@ -74,9 +77,12 @@ void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<
 	float projValues[16] = {	zoomX,	0,		0,		0,   
 								0,		zoomY,	0,		0,	
 								0,		0,		-(farClip + nearClip)/(farClip-nearClip), -1,
-								0,		0,		(-2 * nearClip * farClip) /( farClip -nearClip ),	0}; 
+								0,		0,		(2 * nearClip * farClip) /( farClip -nearClip ),	0}; 
 	matrices.proj.SetValues(projValues);
-	//proj.Transpose();
+	//Matrix<4, 4> v = {1, 0, 0, 0, 0, 1, 0 ,0, 0,0, 1, 0, 0, 0, 0, 1}; 
+	//matrices.proj = v;
+	//matrices.proj.Transpose();
+	proj.Transpose();
 
 }
 void Camera::SetCurrent(){

@@ -8,7 +8,6 @@ struct MVector{
 	float values[ROWS];
 	static MVector<ROWS> Invalid();
 	bool isInvalid();
-
 	float GetValue(int index) const ;
 	float * GetValues();
 	void SetValue(int index, float to);
