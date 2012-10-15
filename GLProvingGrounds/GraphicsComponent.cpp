@@ -38,8 +38,8 @@ void GraphicsComponent::EntitySpecificShaderSetup(){
 }
 void GraphicsComponent::Render(int){
 	EntitySpecificShaderSetup();
-	glBindVertexArray(vao_ID);
-	//glDrawArrays(primMode, 0, numVerts);
-	glDrawElements(primMode, 12, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	GLCALL(glBindVertexArray(vao_ID));
+	//GLCALL(glDrawArrays(primMode, 0, numVerts));
+	GLCALL(glDrawElements(primMode, numVerts, GL_UNSIGNED_INT, (void*)0));
+	GLCALL(glBindVertexArray(0));
 }

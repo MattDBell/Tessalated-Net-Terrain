@@ -82,7 +82,7 @@ void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<
 	//Matrix<4, 4> v = {1, 0, 0, 0, 0, 1, 0 ,0, 0,0, 1, 0, 0, 0, 0, 1}; 
 	//matrices.proj = v;
 	//matrices.proj.Transpose();
-	proj.Transpose();
+	//proj.Transpose();
 
 }
 void Camera::SetCurrent(){

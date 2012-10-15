@@ -27,9 +27,8 @@ void BasicGraphicsComponent::Initialize(){
 	shader->Bind();
 
 	int one = GLCALL(glGetAttribLocation(shader->GetBuffer(), "VertexPosition"));
-	int two = GLCALL(glGetAttribLocation(shader->GetBuffer(), "Normal"));
 	int three = GLCALL(glGetAttribLocation(shader->GetBuffer(), "Color"));
-	printf("%d, %d, %d", one, two, three);
+	printf("%d, %d", one, three);
 	//Generate the Vertex Array Object then Bind it.  VAOs are used to store
 	//a series of ArrayBuffers and an Element Array Buffer for ease of drawing
 	glGenVertexArrays(1, &vao_ID);

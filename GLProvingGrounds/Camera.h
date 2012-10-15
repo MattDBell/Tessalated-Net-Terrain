@@ -11,8 +11,7 @@ class Camera{
 	cameraMatrices matrices;
 	Matrix<4, 4> world;
 
-	Matrix<4, 4> view;
-	Matrix<4, 4> proj;
+
 	
 	MVector<3> position;
 	MVector<3> forward;

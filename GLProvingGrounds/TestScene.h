@@ -23,7 +23,7 @@ struct TestScene{
 
 		AspectRatio.SetValue(0, 1);
 		AspectRatio.SetValue(1, 1);
-		cam->SetProj(0.01f, 1000.0f, (float)(45.0f/ 180 * PI) , AspectRatio );
+		cam->SetProj(0.01f, 1000.0f, (float)(30.0f/ 180 * PI) , AspectRatio );
 		cam->LookAt(camStart, lookAt, upVec);
 
 		context->RegisterCamera(cam, 0);

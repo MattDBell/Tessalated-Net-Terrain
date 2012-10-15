@@ -46,9 +46,9 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	wglMakeCurrent(hdc, tempOpenGLContext);
 
 	//Ensure Glew is working
-	//GLenum error = GLCALL(glewInit());
-	//if(error != GLEW_OK)
-	//	return false;
+	GLenum error = GLCALL(glewInit());
+	if(error != GLEW_OK)
+		return false;
 
 	
 	int attributes[] = {
@@ -72,9 +72,9 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 		hrc = tempOpenGLContext;
 	}
 	GLCALL(glDisable(GL_CULL_FACE));
-	GLenum error = GLCALL(glewInit());
-	if(error != GLEW_OK)
-		return false;
+	//error = GLCALL(glewInit());
+	//if(error != GLEW_OK)
+	//	return false;
 
 
 

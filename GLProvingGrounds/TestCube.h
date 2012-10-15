@@ -37,28 +37,28 @@ public:
 		for(int i = 0; i < 12 * 3; ++i){
 			mfaces[i] = faces[i];
 		}
-		MVector<3>*  normals = new MVector<3>[8];
-		for(int i = 0; i < 8; ++i){
-			normals[i].SetValue(0, 0);
-			normals[i].SetValue(1, 0);
-			normals[i].SetValue(2, 0);
-		}
-		for(int i = 0; i < 12; ++i){
-			int v1 = faces[i * 3];
-			int v2 = faces[i * 3 + 1];
-			int v3 = faces[i * 3 + 2];
-			MVector<3> vOne = vertices[v2] - vertices[v1];
-			MVector<3> vTwo	= vertices[v3] - vertices[v1];
-			MVector<3> crossed = vOne.Cross(vTwo);
-			normals[v1] = normals[v1] + crossed;
-			normals[v2] = normals[v2] + crossed;
-			normals[v3] = normals[v3] + crossed;
-		}
-		for(int i = 0; i < 8; ++i){
-			normals[i].Normalize();
-		}
+		//MVector<3>*  normals = new MVector<3>[8];
+		//for(int i = 0; i < 8; ++i){
+		//	normals[i].SetValue(0, 0);
+		//	normals[i].SetValue(1, 0);
+		//	normals[i].SetValue(2, 0);
+		//}
+		//for(int i = 0; i < 12; ++i){
+		//	int v1 = faces[i * 3];
+		//	int v2 = faces[i * 3 + 1];
+		//	int v3 = faces[i * 3 + 2];
+		//	MVector<3> vOne = vertices[v2] - vertices[v1];
+		//	MVector<3> vTwo	= vertices[v3] - vertices[v1];
+		//	MVector<3> crossed = vOne.Cross(vTwo);
+		//	normals[v1] = normals[v1] + crossed;
+		//	normals[v2] = normals[v2] + crossed;
+		//	normals[v3] = normals[v3] + crossed;
+		//}
+		//for(int i = 0; i < 8; ++i){
+		//	normals[i].Normalize();
+		//}
 		
-		VertexInfo * vIs = new VertexInfo[4];
+		VertexInfo * vIs = new VertexInfo[3];
 		vIs[0].Set("Indices", false	, 12 * 3 * sizeof(GLuint)	, mfaces, VertexInfo::U_GL_STATIC_DRAW,
 			0,	0,	VertexInfo::DT_GL_UNSIGNED_INT,	false, 0, 0);
 
@@ -66,10 +66,10 @@ public:
 			1,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 		vIs[2].Set("Color"			, true	, 8 * 3 * sizeof(GLfloat)	, vertices,	VertexInfo::U_GL_STATIC_DRAW,
 			2,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
-		vIs[3].Set("Normal"			, true	, 8 * 3 * sizeof(GLfloat)	, normals,	VertexInfo::U_GL_STATIC_DRAW,
-			3,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
+		//vIs[3].Set("Normal"			, true	, 8 * 3 * sizeof(GLfloat)	, normals,	VertexInfo::U_GL_STATIC_DRAW,
+		//	3,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 
-		return new TestCube("CubeVertex.glsl", NULL, NULL, NULL, "CubePixel.glsl", vIs, 4, 8, PM_GL_TRIANGLES);
+		return new TestCube("CubeVertex.glsl", NULL, NULL, NULL, "CubePixel.glsl", vIs, 3, 12, PM_GL_TRIANGLES);
 		
 	}
 	virtual void EntitySpecificShaderSetup(){
