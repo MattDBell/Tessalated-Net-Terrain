@@ -99,6 +99,7 @@ int WINAPI WinMain (HINSTANCE, HINSTANCE,
 				DispatchMessage(&msg);
 			}
 		}
+		scene->Update(deltaTime);
 		graphics.RenderAll();
 		//graphics.RenderPass(0, NULL, scene->cam);
 		end = std::clock();

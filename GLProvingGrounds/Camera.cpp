@@ -67,7 +67,7 @@ void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 	matrices.view = orientation.Transposed().multiply(translation); // Orientation matrix inverse == it's transpose.  Then reverse order
 	//Matrix<4, 4> v = {1, 0, 0, 0, 0, 1, 0 ,0, 0,0, 1, 0, 0, 0, 0, 1}; 
 	//matrices.view = v;
-	matrices.view.Transpose();
+	//matrices.view.Transpose();
 }
 void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<2> &aspectRatio){
 	zoomY = 1/tan(fieldOfViewY/2);
@@ -76,8 +76,8 @@ void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<
 	
 	float projValues[16] = {	zoomX,	0,		0,		0,   
 								0,		zoomY,	0,		0,	
-								0,		0,		-(farClip + nearClip)/(farClip-nearClip), -1,
-								0,		0,		(2 * nearClip * farClip) /( farClip -nearClip ),	0}; 
+								0,		0,		(farClip + nearClip)/(farClip-nearClip), 1,
+								0,		0,		(2 * nearClip * farClip) /( nearClip-farClip  ),	0}; 
 	matrices.proj.SetValues(projValues);
 	//Matrix<4, 4> v = {1, 0, 0, 0, 0, 1, 0 ,0, 0,0, 1, 0, 0, 0, 0, 1}; 
 	//matrices.proj = v;

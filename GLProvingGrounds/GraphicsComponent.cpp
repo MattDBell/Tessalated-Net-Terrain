@@ -40,6 +40,6 @@ void GraphicsComponent::Render(int){
 	EntitySpecificShaderSetup();
 	GLCALL(glBindVertexArray(vao_ID));
 	//GLCALL(glDrawArrays(primMode, 0, numVerts));
-	GLCALL(glDrawElements(primMode, numVerts, GL_UNSIGNED_INT, (void*)0));
+	GLCALL(glDrawElements(primMode, numVerts * 3, GL_UNSIGNED_INT, (void*)0));
 	GLCALL(glBindVertexArray(0));
 }
