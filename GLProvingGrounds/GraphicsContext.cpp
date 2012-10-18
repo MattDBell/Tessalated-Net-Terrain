@@ -53,7 +53,7 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	
 	int attributes[] = {
 		WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-		WGL_CONTEXT_MINOR_VERSION_ARB, 2,
+		WGL_CONTEXT_MINOR_VERSION_ARB, 0,
 		WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 		0
 	};
@@ -62,11 +62,14 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	//Current, else make pointer to context = temporary
 	if(wglewIsSupported("WGL_ARB_create_context") == 1){
 		hrc = wglCreateContextAttribsARB(hdc, NULL, attributes);
-		CheckErrors();
-		wglMakeCurrent(NULL, NULL);
-		wglDeleteContext(tempOpenGLContext);
-		wglMakeCurrent(hdc, hrc);
-		CheckErrors();
+		if(!hrc){
+			hrc = tempOpenGLContext;
+		} else {
+			wglMakeCurrent(NULL, NULL);
+			wglDeleteContext(tempOpenGLContext);
+			wglMakeCurrent(hdc, hrc);
+	//		CheckErrors();
+		}
 
 	} else {
 		hrc = tempOpenGLContext;
