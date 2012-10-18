@@ -1,7 +1,7 @@
 #include "Texture.h"
 
-Texture::Texture(TexType t, GLint f)
-		:type(t), format(f)
+Texture::Texture(TexType t, GLint format)
+		:type(t), format(format)
 {
 	GLCALL(glGenTextures(1, &buffer));
 }

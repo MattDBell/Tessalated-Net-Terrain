@@ -41,5 +41,16 @@
     <Filter Include="Testing">
       <UniqueIdentifier>{b7cf5395-7b49-4779-9542-f255c24b0c80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{493ee475-f075-4174-8888-f6c6a35b8bc4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CubePixel.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="CubeVertex.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,14 +1,18 @@
 #ifndef TESTCUBE_H
 #define TESTCUBE_H
 #include "BasicGraphicsComponent.h"
+#include "Texture.h"
 
 class TestCube: public BasicGraphicsComponent{
+
+	Texture* tex;
 	TestCube()
 		:BasicGraphicsComponent(NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, PM_GL_TRIANGLES)
 	{}
-	TestCube(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,  VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode)
-		:BasicGraphicsComponent(vertex, tessalationControl, tessalationEvaluation, geometry, pixel,  vInfos,  numVIs,  numVerts, pmode)
+	TestCube(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,  VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode, Texture* tex)
+		:BasicGraphicsComponent(vertex, tessalationControl, tessalationEvaluation, geometry, pixel,  vInfos,  numVIs,  numVerts, pmode), tex(tex)
 	{}
+	
 public:
 	static TestCube * CreateCube(){
 		
@@ -58,6 +62,36 @@ public:
 		//	normals[i].Normalize();
 		//}
 		
+		Texture * tex = new Texture(Texture::TT_GL_TEXTURE_2D, GL_RGB32F);
+
+		tex->SetParamInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		tex->SetParamInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		tex->SetParamInt(GL_TEXTURE_WRAP_S, GL_REPEAT);
+		tex->SetParamInt(GL_TEXTURE_WRAP_T, GL_REPEAT);
+		tex->SetParamInt(GL_TEXTURE_WRAP_R, GL_REPEAT);
+
+		Texture::TexData data;
+		memset(&data, 0, sizeof(Texture::TexData));
+		
+		float d[64][64][3];
+		for(int x = 0; x < 64 ; ++x){
+			for(int y = 0; y < 64; ++y){
+				d[x][y][0] = (float)x/64.0f;
+				d[x][y][1] = (float)y/64.0f;
+				d[x][y][2] = (float)(x + y) / 128.0f;
+			}
+		}
+		
+		data.height = 64;
+		data.width	= 64;
+		data.level	= 0;
+
+		data.type = GL_FLOAT;
+		data.format = GL_RGB;
+		data.data = &d;
+
+		tex->GiveData(data);
+		
 		VertexInfo * vIs = new VertexInfo[3];
 		vIs[0].Set("Indices", false	, 12 * 3 * sizeof(GLuint)	, mfaces, VertexInfo::U_GL_STATIC_DRAW,
 			0,	0,	VertexInfo::DT_GL_UNSIGNED_INT,	false, 0, 0);
@@ -69,11 +103,15 @@ public:
 		//vIs[3].Set("Normal"			, true	, 8 * 3 * sizeof(GLfloat)	, normals,	VertexInfo::U_GL_STATIC_DRAW,
 		//	3,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 
-		return new TestCube("CubeVertex.glsl", NULL, NULL, NULL, "CubePixel.glsl", vIs, 3, 12, PM_GL_TRIANGLES);
+		return new TestCube("CubeVertex.glsl", NULL, NULL, NULL, "CubePixel.glsl", vIs, 3, 12, PM_GL_TRIANGLES, tex);
 		
 	}
 	virtual void EntitySpecificShaderSetup(){
 		shader->SetUniformMatrix("model", Matrix<4, 4>::Identity());
+	}
+	virtual void Render(int pass){
+		tex->MakeActive(0);
+		BasicGraphicsComponent::Render(pass);
 	}
 
 };

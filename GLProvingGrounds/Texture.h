@@ -1,6 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 #include "Macros.h"
+
 class Texture{
 public:
 	enum TexType{
@@ -28,7 +29,7 @@ public:
 		void*		data;
 	};
 
-	Texture(TexType t, GLint f);
+	Texture(TexType t, GLint format);
 	void SetStorage(GLsizei width, GLsizei height, GLsizei depth, GLint levels);
 	void GiveData(TexData toGive);
 	

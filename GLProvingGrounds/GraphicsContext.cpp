@@ -53,7 +53,7 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	
 	int attributes[] = {
 		WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-		WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+		WGL_CONTEXT_MINOR_VERSION_ARB, 2,
 		WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 		0
 	};
@@ -74,7 +74,7 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	} else {
 		hrc = tempOpenGLContext;
 	}
-	GLCALL(glDisable(GL_CULL_FACE));
+	//GLCALL(glEnable(GL_CULL_FACE));
 	GLCALL(glEnable(GL_DEPTH_TEST));
 	GLCALL(glDepthFunc(GL_LEQUAL));
 	//error = GLCALL(glewInit());
