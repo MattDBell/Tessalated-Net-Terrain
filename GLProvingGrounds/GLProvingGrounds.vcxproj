@@ -95,8 +95,10 @@
     <ClCompile Include="GraphicsComponent.cpp" />
     <ClCompile Include="GraphicsContext.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Macros.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MarchingCubeAsteroid.cpp" />
     <ClCompile Include="MathDefinedFunction.cpp" />
     <ClCompile Include="Matrix.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -115,7 +117,9 @@
     <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="GraphicsContext.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Macros.h" />
+    <ClInclude Include="MarchingCubeAsteroid.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="MVector.h" />

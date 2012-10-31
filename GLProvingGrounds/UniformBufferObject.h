@@ -25,6 +25,7 @@ public:
 
 template <class dataStructure>
 struct UniformBufferObject : public UBOinterface{
+	typedef dataStructure data;
 	unsigned int		uBOBindingIndex;
 	unsigned int		uboIndex;
 	char *				name;
@@ -69,6 +70,10 @@ struct UniformBufferObject : public UBOinterface{
 		if(uniformBlockIndex == GL_INVALID_INDEX)
 			return;
 		GLCALL(glUniformBlockBinding(programBuffer, uniformBlockIndex, uBOBindingIndex));
+	}
+	void SubUpdate(GLintptr offset, GLsizeiptr size, void* data){
+		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
+		GLCALL(glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data));
 	}
 	void Update(dataStructure* data){
 		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
