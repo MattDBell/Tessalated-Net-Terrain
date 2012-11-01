@@ -56,5 +56,14 @@
     <None Include="CubeVertex.glsl">
       <Filter>Shader</Filter>
     </None>
+    <None Include="MarchingCubeVertex.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="MarchingCubeGeometry.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="MarchingCubePixel.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

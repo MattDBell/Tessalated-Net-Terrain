@@ -74,7 +74,8 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	} else {
 		hrc = tempOpenGLContext;
 	}
-	//GLCALL(glEnable(GL_CULL_FACE));
+	GLCALL(glEnable(GL_CULL_FACE));
+	GLCALL(glCullFace(GL_FRONT));
 	GLCALL(glEnable(GL_DEPTH_TEST));
 	GLCALL(glDepthFunc(GL_LEQUAL));
 	//error = GLCALL(glewInit());

@@ -3,17 +3,12 @@
 UniformBufferObject<Light::Lights>* Light::lightUBO = NULL;
 Light::Lights Light::lights = {0}; 
 
-Light::Light(MVector<3> position, MVector<3> color, int type, unsigned __int8  slot)
-	: slot(slot)
+Light::Light(MVector<4> position, MVector<4> color, int type, unsigned __int8  slot)
+	: slot(slot), position(position), color(color), type(type)
 {
-	info.position = position;
-	info.color = color;
-	info.type = type;
 	if(lightUBO == NULL){
 		lightUBO = new UniformBufferObject<Lights>("Lights");
-		for(int i = 0; i < MAXLIGHTS; ++i){
-			lights.lights[i].type = 0;
-		}
+		memset(&lights.type[0], 0, sizeof(lights.type));
 		lightUBO->Update(&lights);
 	}
 	ApplyTo(slot);
@@ -23,20 +18,22 @@ void Light::ApplyTo(unsigned __int8 slot){
 	this->slot = slot;
 	if(slot > MAXLIGHTS)
 		return;
-	lights.lights[slot] = info;
-	//lightUBO->Update(&lights);
-	lightUBO->SubUpdate( OFFSETOF(Lights, lights[slot]), sizeof(ShaderLight), (void*)(&lights.lights[slot]));
+	lights.position[slot]	= position;
+	lights.color[slot]		= color;
+	lights.type[slot]		= type;
+	
+	lightUBO->Update(&lights);
 }
 
-void Light::MoveTo(MVector<3> newPosition){
-	info.position = newPosition;
+void Light::MoveTo(MVector<4> newPosition){
+	position = newPosition;
 	ApplyTo(slot);
 }
-void Light::ChangeColor(MVector<3> newColor){
-	info.color = newColor;
+void Light::ChangeColor(MVector<4> newColor){
+	color = newColor;
 	ApplyTo(slot);
 }
 void Light::ChangeType (int newType){
-	info.type = newType;
+	type = newType;
 	ApplyTo(slot);
 }

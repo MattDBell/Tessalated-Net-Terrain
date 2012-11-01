@@ -12,8 +12,12 @@ in vec3 Color;
 in vec3 Normal;
 
 out vec4 ocolor;
+out vec4 world;
+out vec4 normal;
 
 void main(void){
-	gl_Position = proj * view * model *  vec4(VertexPosition, 1.0);// a
-	ocolor = vec4(Color, 1.0);
+	normal = model * vec4(Normal, 0);
+	world = model * vec4(VertexPosition, 1.0);
+	gl_Position = proj * view * world;// a
+	ocolor = vec4(Color, 1.0) + vec4(0.5, 0.5, 0.5, 0);
 }

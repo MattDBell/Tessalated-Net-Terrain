@@ -15,6 +15,6 @@ public:
 	virtual void EntitySpecificShaderSetup();
 	virtual void Render(int pass);
 
-}:
+};
 
 #endif//MARCHINGCUBEASTEROID_H

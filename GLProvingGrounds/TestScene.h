@@ -3,17 +3,25 @@
 #include "Camera.h"
 #include "TestCube.h"
 #include "Input.h"
-
+#include "Light.h"
 const float PI = 3.14159265f;
 
 struct TestScene{
+	Light* light;
+	Light* light2;
+	TestCube * cube;
 	
 	Camera * cam;
-	TestCube * cube;
 	MVector<2>	AspectRatio;
 	MVector<3>  lookAt;
 	float elevation, azimuth, distance;
-	TestScene(GraphicsContext * context){
+	TestScene(GraphicsContext * context)
+	{
+		MVector<4> lightPos = { 10, 10, 10, 1 };
+		MVector<4> lightColor = {1.0f, 1.0f, 1.0f, 0.0f};
+		
+		light = new Light(lightPos, lightColor, 0x3ff00000, 0);
+		light2 = new Light(lightPos * -1, lightColor, 0x3ff00000, 1);
 		cam = new Camera();
 		elevation = PI * 0.25f;
 		azimuth = 0.0f;
@@ -38,6 +46,7 @@ struct TestScene{
 	~TestScene(){
 		delete cam;
 		delete cube;
+		delete light;
 	}
 	void Update(float dT){
 
