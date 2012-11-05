@@ -3,14 +3,20 @@
 
 #include "BasicGraphicsComponent.h"
 #include "Texture.h"
+#include "UniformBufferObject.h"
+//Plain Old Data Type for UBO
+struct LookupTables{
+	int edgetable	[64  * 4];	
+	int triTable	[256 * 4]; //See MarchingCubeGeometry which stores integers in ivec4s
+};
 
 class MarchingCubeAsteroid : public BasicGraphicsComponent{
 	
 	Texture * tex3d;
 
-	MarchingCubeAsteroid();
+	MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numVerts, Texture * tex3d);
 public:
-
+	static UniformBufferObject<LookupTables>* tables;
 	static MarchingCubeAsteroid * Create();
 	virtual void EntitySpecificShaderSetup();
 	virtual void Render(int pass);

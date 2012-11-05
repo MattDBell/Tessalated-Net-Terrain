@@ -31,7 +31,7 @@ public:
 
 	Texture(TexType t, GLint format);
 	void SetStorage(GLsizei width, GLsizei height, GLsizei depth, GLint levels);
-	void GiveData(TexData toGive);
+	void GiveData(TexData &toGive);
 	
 	void SetParamFloat			(GLenum	pName, GLfloat		param);
 	void SetParamInt			(GLenum	pName, GLint		param);	

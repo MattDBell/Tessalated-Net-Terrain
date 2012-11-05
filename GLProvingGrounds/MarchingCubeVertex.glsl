@@ -5,17 +5,21 @@ layout ( std140 ) uniform CamMats{
 
 uniform mat4 model;
 
-in vec4 position;
-out vec4 world;
-out vec4 right;
-out vec4 up;
-out vec4 forward;
+in vec3 VertexPosition;
+
+out VertexData {
+	vec4 uvwCoords;
+	vec4 right;
+	vec4 up;
+	vec4 forward;
+} outData;
 
 
 void main(void){
-	world	= model * position;
-	right	= model * vec4(1, 0, 0, 0);
-	up		= model * vec4(0, 1, 0, 0);
-	forward	= model * vec4(0, 0, 1, 0);
-	output.pos = mul(input.position, mul(ObjectTransform,WorldViewProjection )); // move it
+	vec4 position		= vec4(VertexPosition, 1);
+	gl_Position			= model * position;
+	outData.right		= model * vec4(1, 0, 0, 0);
+	outData.up			= model * vec4(0, 1, 0, 0);
+	outData.forward		= model * vec4(0, 0, 1, 0);
+	outData.uvwCoords	= vec4(VertexPosition, 0);
 }

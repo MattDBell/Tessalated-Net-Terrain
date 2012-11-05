@@ -26,7 +26,7 @@ void Texture::SetStorage(GLsizei width, GLsizei height, GLsizei depth, GLint lev
 	}
 }
 
-void Texture::GiveData(TexData toGive){
+void Texture::GiveData(TexData &toGive){
 	GLCALL(glBindTexture(type, buffer));
 	switch(type){
 	case TT_GL_TEXTURE_1D:
