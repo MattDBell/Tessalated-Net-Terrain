@@ -1,12 +1,12 @@
 layout(binding = 0) uniform sampler3D samp;
 
-layout( std140 ) uniform MCIndices {
+layout( std140 ) uniform LookupTablesMC {
 	ivec4 edgeTable[64];
 	ivec4 triTable[256];
 };
 
 layout(points) in;
-layout(triangle_strip, max_vertices = 12) out;
+layout(triangle_strip, max_vertices = 15) out;
 
 in VertexData {
 	vec4 uvwCoords;
@@ -18,6 +18,25 @@ in VertexData {
 
 
 void main(void){
+	int3 topRightForwardDiff = int3( 1, 1, 1);
+	int3 bottomLeftBackDiff = int3( 0, 0, 0);
+	unsigned int masks[4] = {0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000};
+	unsigned int shifts[4] = {0, 8, 16, 24 };
+	unsigned int edgeVers[12][2] = { { 0, 1}, {1, 2}, {2, 3}, {3, 0},
+	{4, 5}, {5, 6}, {6, 7}, {7, 4},
+	{4, 0}, {5, 1}, {6, 2}, {7, 3} };
+	int3 diffs[8] = {
+	int3(bottomLeftBackDiff.xyz),
+	int3(topRightForwardDiff.x, bottomLeftBackDiff.yz),
+	int3(topRightForwardDiff.x, bottomLeftBackDiff.y, topRightForwardDiff.z),
+	int3(bottomLeftBackDiff.xy, topRightForwardDiff.z),
+	int3(bottomLeftBackDiff.x, topRightForwardDiff.y, bottomLeftBackDiff.z),
+	int3(topRightForwardDiff.xy,  bottomLeftBackDiff.z),
+	int3(topRightForwardDiff.xyz),
+	int3(bottomLeftBackDiff.x, topRightForwardDiff.yz)
+	 };
+
+
 	vec4 corners[8] = {gl_in[0].gl_position, //bottom left back
 	gl_in[0].gl_position + inData[0].right,
 	gl_in[0].gl_position + inData[0].forward + inData[0].right,
@@ -53,9 +72,9 @@ void main(void){
 
 	//Put verts into tristream
 	int vertCount = 0;
-	float4 tris[15] = {float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),
-	float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),
-	float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0)};
+	vec4 tris[15] = {	vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),
+	vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),
+	vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0)};
 	for(int pack = 0; pack < 4; ++pack){
 		for(int item = 0; item < 4; ++item){
 			int v = (triTable[gridindex][pack] & masks[item]) >> shifts[item];
@@ -67,16 +86,13 @@ void main(void){
 	}
 	int outputs = 0;
 	for(int y = 0; y < 15; y += 3){
-		PSInput goingOut1 = (PSInput)0;
-		PSInput goingOut2 = (PSInput)0;
-		PSInput goingOut3 = (PSInput)0;
-		goingOut1.pos = tris[outputs];
-		goingOut2.pos = tris[outputs + 1];
-		goingOut3.pos = tris[outputs + 2];
-		triStream.Append(goingOut1);
-		triStream.Append(goingOut2);
-		triStream.Append(goingOut3);
-		triStream.RestartStrip();
+		gl_PerVertex.glPosition = tris[output];
+		EmitVertex();
+		gl_PerVertex.glPosition = tris[output];
+		EmitVertex();
+		gl_PerVertex.glPosition = tris[output];
+		EmitVertex();
+		EndPrimitive();
 		outputs += 3;
 	}
 

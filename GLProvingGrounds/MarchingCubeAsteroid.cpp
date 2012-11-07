@@ -8,6 +8,11 @@ MarchingCubeAsteroid::MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int n
 }
 
 MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
+	static bool firstRun = true;
+	if(firstRun){
+		PopulateTables();
+		firstRun = false;
+	}
 	const int numVIs = 1;
 
 	MVector<3> positions[32*32*32];
@@ -68,4 +73,15 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
 void MarchingCubeAsteroid::EntitySpecificShaderSetup()
 {
 	tex3d->MakeActive(0);
+}
+
+void MarchingCubeAsteroid::Render(int pass){
+	BasicGraphicsComponent::Render(pass);
+}
+
+void MarchingCubeAsteroid::PopulateTables(){
+	LookupTables table = {
+
+	}
+	tables = new UniformBufferObject<LookupTables>("LookupTablesMC");
 }

@@ -15,8 +15,10 @@ class MarchingCubeAsteroid : public BasicGraphicsComponent{
 	Texture * tex3d;
 
 	MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numVerts, Texture * tex3d);
-public:
 	static UniformBufferObject<LookupTables>* tables;
+	static void PopulateTables();
+
+public:
 	static MarchingCubeAsteroid * Create();
 	virtual void EntitySpecificShaderSetup();
 	virtual void Render(int pass);
