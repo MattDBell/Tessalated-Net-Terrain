@@ -44,9 +44,40 @@ void main(void){
 	}
 
 	unsigned int edge = edgeTable[gridIndex >> 2][gridIndex & 3];
-
 	for(int i = 0; i < 12; ++i){
-		
+		if((edge & (1 << i)) != 0){
+			unsigned int ver[2] = {edgeVers[i][0], edgeVers[i][1]};
+			verts[i] = corners[ver[0]] + (-densities[ver[0]] * (corners[ver[1]] - corners[ver[0]])/ ((float)densities[ver[1]] - (float)densities[ver[0]]) ) ;
+		}
+	}
+
+	//Put verts into tristream
+	int vertCount = 0;
+	float4 tris[15] = {float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),
+	float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),
+	float4( 0, 0, 0, 0),float4( 0, 0, 0, 0),float4( 0, 0, 0, 0)};
+	for(int pack = 0; pack < 4; ++pack){
+		for(int item = 0; item < 4; ++item){
+			int v = (triTable[gridindex][pack] & masks[item]) >> shifts[item];
+			if( v == 255)
+				break;
+			tris[vertCount] = verts[v];
+			vertCount += 1;
+		}
+	}
+	int outputs = 0;
+	for(int y = 0; y < 15; y += 3){
+		PSInput goingOut1 = (PSInput)0;
+		PSInput goingOut2 = (PSInput)0;
+		PSInput goingOut3 = (PSInput)0;
+		goingOut1.pos = tris[outputs];
+		goingOut2.pos = tris[outputs + 1];
+		goingOut3.pos = tris[outputs + 2];
+		triStream.Append(goingOut1);
+		triStream.Append(goingOut2);
+		triStream.Append(goingOut3);
+		triStream.RestartStrip();
+		outputs += 3;
 	}
 
 }
