@@ -9,8 +9,8 @@ class TestCube: public BasicGraphicsComponent{
 	TestCube()
 		:BasicGraphicsComponent(NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, PM_GL_TRIANGLES)
 	{}
-	TestCube(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,  VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode, Texture* tex)
-		:BasicGraphicsComponent(vertex, tessalationControl, tessalationEvaluation, geometry, pixel,  vInfos,  numVIs,  numVerts, pmode), tex(tex)
+	TestCube(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,  VertexInfo* vInfos, int numVIs, int numElements, PrimitiveMode pmode, Texture* tex)
+		:BasicGraphicsComponent(vertex, tessalationControl, tessalationEvaluation, geometry, pixel,  vInfos,  numVIs,  numElements, pmode), tex(tex)
 	{}
 	
 public:
@@ -101,14 +101,15 @@ public:
 		vIs[3].Set("Normal"			, true	, 8 * 3 * sizeof(GLfloat)	, normals,	VertexInfo::U_GL_STATIC_DRAW,
 			3,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 
-		return new TestCube("CubeVertex.glsl", NULL, NULL, NULL, "CubePixel.glsl", vIs, 4, 12, PM_GL_TRIANGLES, tex);
+		return new TestCube("CubeVertex.glsl", NULL, NULL, NULL, "CubePixel.glsl", vIs, 4, 12 * 3, PM_GL_TRIANGLES, tex);
 		
 	}
 	virtual void EntitySpecificShaderSetup(){
 		shader->SetUniformMatrix("model", Matrix<4, 4>::Identity());
+		tex->MakeActive(0);
 	}
 	virtual void Render(int pass){
-		tex->MakeActive(0);
+		
 		BasicGraphicsComponent::Render(pass);
 	}
 

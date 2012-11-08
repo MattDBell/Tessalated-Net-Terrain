@@ -17,7 +17,7 @@ public:
 		TT_GL_TEXTURE_2D_MULTISAMPLE		= 0x9100,
 		TT_GL_TEXTURE_2D_MULTISAMPLE_ARRAY	= 0x9102
 	};
-
+	
 	struct TexData{
 		GLenum		target;
 		GLint		level;

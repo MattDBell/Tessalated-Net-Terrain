@@ -4,8 +4,8 @@
 #include "Camera.h"
 
 
-GraphicsComponent::GraphicsComponent(VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode)
-	: vInfos(vInfos), numVInfo(numVIs), numVerts(numVerts), primMode(pmode)
+GraphicsComponent::GraphicsComponent(VertexInfo* vInfos, int numVIs, int numElements, PrimitiveMode pmode)
+	: vInfos(vInfos), numVInfo(numVIs), numElements(numElements), primMode(pmode), usesElements(false)
 {}
 GraphicsComponent::~GraphicsComponent()
 {}
@@ -27,6 +27,9 @@ void GraphicsComponent::Initialize(){
 
 	for(int i = 0; i < numVInfo; ++i){
 		vInfos[i].iBuffer = buffers[i];
+		if(!vInfos[i].bIsArrayBuffer){
+			usesElements = true;
+		}
 		vInfos[i].Initialize();
 	}
 	//Unbind VAO
@@ -39,7 +42,11 @@ void GraphicsComponent::EntitySpecificShaderSetup(){
 void GraphicsComponent::Render(int){
 	EntitySpecificShaderSetup();
 	GLCALL(glBindVertexArray(vao_ID));
-	//GLCALL(glDrawArrays(primMode, 0, numVerts));
-	GLCALL(glDrawElements(primMode, numVerts * 3, GL_UNSIGNED_INT, (void*)0));
+	if(!usesElements){
+		GLCALL(glDrawArrays(primMode, 0, numElements));
+	}
+	else{
+		GLCALL(glDrawElements(primMode, numElements, GL_UNSIGNED_INT, (void*)0));
+	}
 	GLCALL(glBindVertexArray(0));
 }

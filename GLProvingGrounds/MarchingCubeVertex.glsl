@@ -1,3 +1,5 @@
+#version 420
+
 layout ( std140 ) uniform CamMats{
 	mat4 view;
 	mat4 proj;

@@ -31,8 +31,9 @@ protected:
 	unsigned int	vao_ID;
 	VertexInfo		* vInfos;
 	const int		numVInfo;
-	const int		numVerts;
+	const int		numElements;
 	PrimitiveMode	primMode;
+	bool			usesElements;
 public:
 	GraphicsComponent(VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode);
 	virtual ~GraphicsComponent();

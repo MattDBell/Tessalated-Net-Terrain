@@ -4,13 +4,15 @@
 #include "TestCube.h"
 #include "Input.h"
 #include "Light.h"
+#include "MarchingCubeAsteroid.h"
 const float PI = 3.14159265f;
 
 struct TestScene{
 	Light* light;
 	Light* light2;
 	TestCube * cube;
-	
+	MarchingCubeAsteroid* asteroid;
+
 	Camera * cam;
 	MVector<2>	AspectRatio;
 	MVector<3>  lookAt;
@@ -41,6 +43,10 @@ struct TestScene{
 
 		cube = TestCube::CreateCube();
 		cube->Initialize();
+
+		asteroid = MarchingCubeAsteroid::Create();
+		asteroid->Initialize();
+		context->RegisterGraphComp(asteroid, 0);
 		context->RegisterGraphComp(cube, 0);
 	}
 	~TestScene(){
@@ -68,6 +74,7 @@ struct TestScene{
 		if(Input::Get()->GetKey('E')){
 			distance-= dT;
 		}
+		elevation = elevation > 0.9f ? 0.9f : elevation < -0.9f ? -0.9f : elevation;
 		MVector<3> camPos= { cos(elevation) * cos(azimuth) * distance, sin(elevation)* distance, cos(elevation) * sin(azimuth)* distance};
 		MVector<3> upVec = {0, 1, 0};
 		cam->LookAt(camPos, lookAt, upVec);

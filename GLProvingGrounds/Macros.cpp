@@ -28,7 +28,6 @@ void CheckErrors(){
 				error = "UNKNOWN";
 				break;
 		}
-		printf(error);
 		result = glGetError();
 	}
 }

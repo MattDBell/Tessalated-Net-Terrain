@@ -1,3 +1,6 @@
+#version 420
+
+out vec4 outColor;
 void main(void){
-	return vec4( 0.5, 0.5, 0.5, 1);
+	outColor = vec4( 0.5, 0.5, 0.5, 1);
 }

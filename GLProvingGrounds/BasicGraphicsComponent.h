@@ -17,7 +17,7 @@ protected:
 	char			*vertex, *tessalationControl, *tessalationEvaluation, *geometry, *pixel;
 	
 public:
-	BasicGraphicsComponent(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,  VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode);
+	BasicGraphicsComponent(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,  VertexInfo* vInfos, int numVIs, int numElements, PrimitiveMode pmode);
 	virtual ~BasicGraphicsComponent();
 	virtual void Initialize();
 	virtual void EntitySpecificShaderSetup();

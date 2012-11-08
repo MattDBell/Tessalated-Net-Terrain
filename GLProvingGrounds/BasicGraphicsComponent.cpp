@@ -1,8 +1,8 @@
 #include "BasicGraphicsComponent.h"
 
 BasicGraphicsComponent::BasicGraphicsComponent(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,
-	VertexInfo* vInfos, int numVIs, int numVerts, PrimitiveMode pmode)
-	: GraphicsComponent(vInfos, numVIs, numVerts, pmode), 
+	VertexInfo* vInfos, int numVIs, int numElements, PrimitiveMode pmode)
+	: GraphicsComponent(vInfos, numVIs, numElements, pmode), 
 	vertex(vertex), tessalationControl(tessalationControl), tessalationEvaluation(tessalationEvaluation),  geometry(geometry), pixel(pixel)
 	
 {
@@ -26,9 +26,6 @@ void BasicGraphicsComponent::Initialize(){
 	shader->Link();
 	shader->Bind();
 
-	int one = GLCALL(glGetAttribLocation(shader->GetBuffer(), "VertexPosition"));
-	int three = GLCALL(glGetAttribLocation(shader->GetBuffer(), "Color"));
-	printf("%d, %d", one, three);
 	//Generate the Vertex Array Object then Bind it.  VAOs are used to store
 	//a series of ArrayBuffers and an Element Array Buffer for ease of drawing
 	glGenVertexArrays(1, &vao_ID);
@@ -38,6 +35,8 @@ void BasicGraphicsComponent::Initialize(){
 	glGenBuffers(numVInfo, buffers);
 	for(int i = 0; i < numVInfo; ++i){
 		vInfos[i].iBuffer = buffers[i];
+		if(!vInfos[i].bIsArrayBuffer)
+			usesElements = true;
 		vInfos[i].Initialize();
 	}
 	//Unbind VAO
