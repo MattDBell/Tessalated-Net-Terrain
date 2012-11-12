@@ -1,6 +1,6 @@
 #version 420
 
-layout(binding = 0) uniform sampler3D samp;
+layout(binding = 1) uniform sampler3D samp;
 
 layout( std140 ) uniform LookupTablesMC {
 	uvec4 edgeTable[64];
@@ -21,8 +21,8 @@ in VertexData {
 
 void main(void){
 
-	unsigned int masks[4] = {0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000};
-	unsigned int shifts[4] = {0, 8, 16, 24 };
+	unsigned int masks[4] = {0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff};
+	unsigned int shifts[4] = {24, 16, 8, 0 };
 	unsigned int edgeVers[24] = { 0, 1, 1, 2, 2, 3, 3, 0,
 								  4, 5, 5, 6, 6, 7, 7, 4,
 								  4, 0, 5, 1, 6, 2, 7, 3 };
@@ -75,16 +75,16 @@ void main(void){
 			vertCount += 1;
 		}
 	}
-	int output = 0;
-	for(int y = 0; y < 15; y += 3){
-		gl_Position = tris[output];
+	int outputNum = 0;
+	for(int y = 0; y < vertCount; y += 3){
+		gl_Position = tris[outputNum];
 		EmitVertex();
-		gl_Position = tris[output+1];
+		gl_Position = tris[outputNum+1];
 		EmitVertex();
-		gl_Position = tris[output+2];
+		gl_Position = tris[outputNum+2];
 		EmitVertex();
 		EndPrimitive();
-		output += 3;
+		outputNum += 3;
 	}
 
 }

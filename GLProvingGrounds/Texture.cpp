@@ -87,9 +87,11 @@ void Texture::GenerateMipMaps(){
 }
 
 void Texture::MakeActive(unsigned int slot){
-	GLCALL(glBindTexture(type, buffer));
 	if(slot < GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS){
 		boundTo = GL_TEXTURE0 + slot;
 		GLCALL(glActiveTexture(boundTo));
+		GLCALL(glBindTexture(type, buffer));
 	}
+	
+	
 }

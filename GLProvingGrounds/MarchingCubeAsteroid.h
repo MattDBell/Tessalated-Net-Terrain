@@ -4,10 +4,11 @@
 #include "BasicGraphicsComponent.h"
 #include "Texture.h"
 #include "UniformBufferObject.h"
+#include <cstdint>
 //Plain Old Data Type for UBO
 struct LookupTables{
-	int edgetable	[64  * 4];	
-	int triTable	[256 * 4]; //See MarchingCubeGeometry which stores integers in ivec4s
+	uint32_t edgetable	[64  * 4];	
+	uint32_t triTable	[256 * 4]; //See MarchingCubeGeometry which stores integers in ivec4s
 };
 
 class MarchingCubeAsteroid : public BasicGraphicsComponent{

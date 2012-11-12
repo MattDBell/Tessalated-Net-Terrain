@@ -46,8 +46,9 @@ struct TestScene{
 
 		asteroid = MarchingCubeAsteroid::Create();
 		asteroid->Initialize();
-		context->RegisterGraphComp(asteroid, 0);
+		
 		context->RegisterGraphComp(cube, 0);
+		context->RegisterGraphComp(asteroid, 0);
 	}
 	~TestScene(){
 		delete cam;
