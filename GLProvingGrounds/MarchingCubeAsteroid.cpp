@@ -19,44 +19,43 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
 	}
 	const int numVIs = 1;
 	
-	MVector<3>* positions = new MVector<3>[32*32*32];
-	for(int z = 0; z < 32; ++z){
-		for(int y = 0; y < 32; ++y){
-			for(int x = 0; x < 32; ++x){
+	MVector<3>* positions = new MVector<3>[31*31*31];
+	for(int z = 0; z < 31; ++z){
+		for(int y = 0; y < 31; ++y){
+			for(int x = 0; x < 31; ++x){
 				MVector<3> pos = {(float)x, (float)y, (float)z};
-				positions[x + y * 32 + z *32 *32] = pos;
+				positions[x + y * 31 + z *31 *31] = pos;
 			}
 		}
 	}
-	int numElements = 32 * 32 * 32;
+	int numElements = 31 * 31 * 31;
 	//Generating histopyramids will be done in here so numVerts will change.  ALso the previous declared exhaustive
 	//vertices will be thrown away.  But! For now, carry on.
 
 	VertexInfo *vIs = new VertexInfo[numVIs];
 	/*vIs[0].Set("Indices", false	, numElements * sizeof(GLuint)	, mfaces, VertexInfo::U_GL_STATIC_DRAW,
 			0,	0,	VertexInfo::DT_GL_UNSIGNED_INT,	false, 0, 0);*/
-	vIs[0].Set("VertexPosition"	, true	, 32 *32 *32 * 3 * sizeof(GLfloat)	, positions,	VertexInfo::U_GL_STATIC_DRAW,
+	vIs[0].Set("VertexPosition"	, true	, 31 *31 *31 * 3 * sizeof(GLfloat)	, positions,	VertexInfo::U_GL_STATIC_DRAW,
 		1,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 
 	Texture * tex3d = new Texture(Texture::TT_GL_TEXTURE_3D, GL_R32F); //This will definitely change.
 
 	tex3d->SetParamInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	tex3d->SetParamInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_S, GL_REPEAT);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_T, GL_REPEAT);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_R, GL_REPEAT);
+	tex3d->SetParamInt(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	tex3d->SetParamInt(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	tex3d->SetParamInt(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	Texture::TexData data;
 	memset(&data, 0, sizeof(Texture::TexData));
 
-	srand(0xcdcdcdcd);
-	//MVector<3> center = {16.0f, 16.0f, 16.0f};
+	MVector<3> center = {16.0f, 16.0f, 16.0f};
 	GLfloat d[32 * 32 * 32];
 	for(int z = 0; z < 32; ++z){
 		for(int y = 0; y < 32; ++y){
 			for(int x = 0; x < 32; ++x){
-				//MVector<3> pos = {(float)x, (float)y, (float)z};
-				d[x + y *32 + z * 32 * 32] = (float)((rand() % 10) -7);//5.0f - (pos-center).Length();
+				MVector<3> pos = {(float)x, (float)y, (float)z};
+				d[x + y *32 + z * 32 * 32] =10.0f - (pos-center).Length();// (float)((rand() % 10) -7);
 			}
 		}
 	}

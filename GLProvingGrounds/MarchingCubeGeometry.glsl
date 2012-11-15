@@ -7,6 +7,11 @@ layout( std140 ) uniform LookupTablesMC {
 	uvec4 triTable[256];
 };
 
+layout ( std140 ) uniform CamMats{
+	mat4 view;
+	mat4 proj;
+};
+
 layout(points) in;
 layout(triangle_strip, max_vertices = 15) out;
 
@@ -17,10 +22,17 @@ in VertexData {
 	vec4 forward;
 } inData[];
 
+out PixelData{
+	vec3 normal;
+	vec4 worldPos;
+	vec4 shapeColor;
+};
 
 
 void main(void){
 
+	//unsigned int masks[4] = {0x000000ff, 0x0000ff00,0x00ff0000,  0xff000000};
+	//unsigned int shifts[4] = { 0, 8,16,24 };
 	unsigned int masks[4] = {0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff};
 	unsigned int shifts[4] = {24, 16, 8, 0 };
 	unsigned int edgeVers[24] = { 0, 1, 1, 2, 2, 3, 3, 0,
@@ -63,28 +75,46 @@ void main(void){
 
 	//Put verts into tristream
 	int vertCount = 0;
-	vec4 tris[15] = {	vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),
-	vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),
-	vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0),vec4( 0, 0, 0, 0)};
+	vec4 tris[15]= {vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),
+				 	vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0) };
+
+	//This breaks glsl
+	uint Vees[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	for(int pack = 0; pack < 4; ++pack){
 		for(int item = 0; item < 4; ++item){
-			unsigned int v = (triTable[gridIndex][pack] & masks[item]) >> shifts[item];
-			if( v == 255)
-				break;
-			tris[vertCount] = verts[v];
+			Vees[pack * 4 + item]= (triTable[gridIndex][pack] & masks[item]) >> shifts[item];
+			//uint v  = (triTable[gridIndex][pack] & masks[item]) >> shifts[item];
+			//if(v < 255){
+			//	tris[vertCount] = verts[v];
+			//	vertCount += 1;
+			//}
+		}
+	}
+
+	for(int i = 0; i < 15 && Vees[i] != 255 ; ++i){
+		if(Vees[i] < 255){
+			tris[i] = verts[Vees[i]];
 			vertCount += 1;
 		}
 	}
-	int outputNum = 0;
+
+	float c = float(vertCount) / 15.0;
+	shapeColor = vec4(c, c, c, 1);
 	for(int y = 0; y < vertCount; y += 3){
-		gl_Position = tris[outputNum];
+		vec3 norm = cross(tris[y + 1].xyz - tris[y].xyz, tris[y+2].xyz - tris[y].xyz);
+		gl_Position = proj * view * tris[y];
+		normal = norm;
+		worldPos = tris[y];
 		EmitVertex();
-		gl_Position = tris[outputNum+1];
+		gl_Position = proj * view * tris[y+1];
+		normal = norm;
+		worldPos = tris[y + 1];
 		EmitVertex();
-		gl_Position = tris[outputNum+2];
+		gl_Position = proj * view * tris[y+2];
+		normal = norm;
+		worldPos = tris[y + 2];
 		EmitVertex();
 		EndPrimitive();
-		outputNum += 3;
 	}
 
 }
