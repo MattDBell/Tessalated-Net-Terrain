@@ -25,5 +25,5 @@ void main(void){
 	}
 
 	outColor = shapeColor;
-	//outColor = outColor * diffuseColor;
+	outColor = outColor * diffuseColor;
 }

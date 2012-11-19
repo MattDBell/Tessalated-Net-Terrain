@@ -28,93 +28,89 @@ out PixelData{
 	vec4 shapeColor;
 };
 
-
-void main(void){
-
-	//unsigned int masks[4] = {0x000000ff, 0x0000ff00,0x00ff0000,  0xff000000};
-	//unsigned int shifts[4] = { 0, 8,16,24 };
-	unsigned int masks[4] = {0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff};
-	unsigned int shifts[4] = {24, 16, 8, 0 };
-	unsigned int edgeVers[24] = { 0, 1, 1, 2, 2, 3, 3, 0,
-								  4, 5, 5, 6, 6, 7, 7, 4,
-								  4, 0, 5, 1, 6, 2, 7, 3 };
-
-
-	vec4 corners[8] = {gl_in[0].gl_Position, //bottom left back
-	gl_in[0].gl_Position + inData[0].right,
-	gl_in[0].gl_Position + inData[0].forward + inData[0].right,
-	gl_in[0].gl_Position + inData[0].forward,
-	gl_in[0].gl_Position + inData[0].up,
-	gl_in[0].gl_Position + inData[0].up + inData[0].right,
-	gl_in[0].gl_Position + inData[0].up + inData[0].forward + inData[0].right,
-	gl_in[0].gl_Position + inData[0].up + inData[0].forward};
-	
+void main(void)
+{
 	ivec4 diffs[8] = {	ivec4(0, 0, 0, 0), ivec4(1, 0, 0, 0), ivec4(1, 0, 1, 0), ivec4(0, 0, 1, 0),
 						ivec4(0, 1, 0, 0), ivec4(1, 1, 0, 0), ivec4(1, 1, 1, 0), ivec4(0, 1, 1, 0)};
-
-	float densities[8];
-	unsigned int gridIndex = 0;
-
-	vec4 verts[12] = {	vec4( 0, 0, 0, 0), vec4( 0, 0, 0, 0), vec4( 0, 0, 0, 0), vec4( 0, 0, 0, 0), 
-	vec4( 0, 0, 0, 0),	vec4( 0, 0, 0, 0), vec4( 0, 0, 0, 0), vec4( 0, 0, 0, 0), vec4( 0, 0, 0, 0), 
-	vec4( 0, 0, 0, 0),	vec4( 0, 0, 0, 0), vec4( 0, 0, 0, 0)};
-
-	for(int i = 0; i < 8; ++i){
-		ivec4 loc = ivec4(inData[0].uvwCoords)+ diffs[i];
-		densities[i] = texelFetch(samp, loc.xyz, 0).r;
-		gridIndex |= (densities[i] < 0) ? (i << i) : 0;
+	unsigned int masks[4] = {0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff};
+	unsigned int shifts[4] = {24, 16, 8, 0 };
+	float isoLevel = 1;
+	//=====================Find Grid Index ======================
+	
+	uint gridIndex = 0;
+	float[8] value;
+	value[0] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[0].xyz, 0).r;
+	value[1] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[1].xyz, 0).r;
+	value[2] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[2].xyz, 0).r;
+	value[3] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[3].xyz, 0).r;
+	value[4] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[4].xyz, 0).r;
+	value[5] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[5].xyz, 0).r;
+	value[6] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[6].xyz, 0).r;
+	value[7] = texelFetch(samp, ivec3( (inData[0].uvwCoords.xyz) + vec3(0.5 , 0.5, 0.5) ) + diffs[7].xyz, 0).r;
+	for(int i = 0; i < 8; ++i)
+	{	
+		if(value[i] < isoLevel) gridIndex |= (1 << i);
 	}
 
-	uint edge = edgeTable[gridIndex >> 2U][gridIndex & 3U];
-	for(int i = 0; i < 12; ++i){
-		if((edge & (1 << i)) != 0){
-			unsigned int ver[2] = {edgeVers[i*2], edgeVers[i*2 + 1]};
-			verts[i] = corners[ver[0]] + (-densities[ver[0]] * (corners[ver[1]] - corners[ver[0]])/ (densities[ver[1]] - densities[ver[0]]) ) ;
+
+	uint edge = edgeTable[gridIndex / 4][gridIndex %4];
+	vec4 verts[12];
+	uint ver2s[12] = {1, 2, 3, 0, 5, 6, 7, 4, 0, 1, 2, 3};
+	for(int i = 0; i < 12; ++i)
+	{
+		if(((edge >> i) &1) == 1)
+		{
+			uint ver1;
+			if(i < 8){
+				ver1 = i;
+			} else {
+				ver1 = i -4;
+			}
+			uint ver2 = ver2s[i];
+			vec4 vert1= gl_in[0].gl_Position + diffs[ver1].x * inData[0].right + diffs[ver1].y * inData[0].up + diffs[ver1].z * inData[0].forward;
+			vec4 vert2= gl_in[0].gl_Position + diffs[ver2].x * inData[0].right + diffs[ver2].y * inData[0].up + diffs[ver2].z * inData[0].forward;
+			verts[i] = vert1 + (vert1 - vert2) * (isoLevel- value[ver1]) / (value[ver1] - value[ver2]);
+			//verts[i] = vert1 + (-value[ver1] * (vert2 - vert1)/ (value[ver2] - value[ver1]) ) ;
+			
+		}
+		else
+		{
+			verts[i] = vec4(0, 0, 0, 0);
 		}
 	}
-
-	//Put verts into tristream
-	int vertCount = 0;
-	vec4 tris[15]= {vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),
-				 	vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0),vec4(0, 0, 0, 0) };
-
-	//This breaks glsl
-	uint Vees[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-	for(int pack = 0; pack < 4; ++pack){
-		for(int item = 0; item < 4; ++item){
-			Vees[pack * 4 + item]= (triTable[gridIndex][pack] & masks[item]) >> shifts[item];
-			//uint v  = (triTable[gridIndex][pack] & masks[item]) >> shifts[item];
-			//if(v < 255){
-			//	tris[vertCount] = verts[v];
-			//	vertCount += 1;
-			//}
+	int tris[15];
+	for(int i = 0; i < 15; i += 3)
+	{
+		tris[i] = int((triTable[gridIndex][i/4] & masks[i%4]) >> shifts[i%4]);
+		float c = clamp(-(tris[i] -12), 0, 1);
+		if(tris[i] < 12)
+		{
+			tris[i + 1] = int((triTable[gridIndex][(i + 1) /4] & masks[(i + 1) %4]) >> shifts[(i + 1) %4]);
+			tris[i + 2] = int((triTable[gridIndex][(i + 2) /4] & masks[(i + 2) %4]) >> shifts[(i + 2) %4]);
 		}
-	}
-
-	for(int i = 0; i < 15 && Vees[i] != 255 ; ++i){
-		if(Vees[i] < 255){
-			tris[i] = verts[Vees[i]];
-			vertCount += 1;
+		else
+		{
+			tris[i] = 0;
+			tris[i + 1] = 0;
+			tris[i + 2] = 0;
 		}
-	}
-
-	float c = float(vertCount) / 15.0;
-	shapeColor = vec4(c, c, c, 1);
-	for(int y = 0; y < vertCount; y += 3){
-		vec3 norm = cross(tris[y + 1].xyz - tris[y].xyz, tris[y+2].xyz - tris[y].xyz);
-		gl_Position = proj * view * tris[y];
-		normal = norm;
-		worldPos = tris[y];
+		
+		gl_PointSize = 1;
+		gl_ClipDistance[0] = 100;
+		shapeColor = vec4(c, c, c, 1); //inData[0].up * 0.5f + inData[0].right * 0.5f + inData[0].forward * 0.5f;
+		normal = normalize( cross ( (verts[tris[i + 1]] - verts[ tris[i]]).xyz, (verts[ tris [i + 2] ] - verts[ tris [ i ] ]).xyz));
+		worldPos = verts[tris[i]];
+		gl_Position = proj * view * worldPos;
 		EmitVertex();
-		gl_Position = proj * view * tris[y+1];
-		normal = norm;
-		worldPos = tris[y + 1];
+		worldPos = verts[tris[i+ 1]];
+		gl_Position = proj * view * worldPos;
 		EmitVertex();
-		gl_Position = proj * view * tris[y+2];
-		normal = norm;
-		worldPos = tris[y + 2];
+		worldPos = verts[tris[i + 2]];
+		gl_Position = proj * view * worldPos;
 		EmitVertex();
 		EndPrimitive();
+	
 	}
 
 }
+

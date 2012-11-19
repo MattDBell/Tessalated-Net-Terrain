@@ -27,7 +27,7 @@ struct TestScene{
 		cam = new Camera();
 		elevation = PI * 0.25f;
 		azimuth = 0.0f;
-		distance = 10.0f;
+		distance = 30.0f;
 		MVector<3> camStart = { cos(elevation) * cos(azimuth) * distance, sin(elevation)* distance, cos(elevation) * sin(azimuth)* distance};
 		MVector<3> upVec = {0, 1, 0};
 				

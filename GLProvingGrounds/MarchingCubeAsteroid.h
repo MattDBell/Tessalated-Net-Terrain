@@ -14,7 +14,7 @@ struct LookupTables{
 class MarchingCubeAsteroid : public BasicGraphicsComponent{
 	
 	Texture * tex3d;
-
+	Matrix<4, 4> transform;
 	MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numVerts, Texture * tex3d);
 	static UniformBufferObject<LookupTables>* tables;
 	static void PopulateTables();

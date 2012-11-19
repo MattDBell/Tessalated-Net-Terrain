@@ -8,7 +8,8 @@ UniformBufferObject<LookupTables>* MarchingCubeAsteroid::tables = 0;
 MarchingCubeAsteroid::MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numElements, Texture* tex3d)
 	:BasicGraphicsComponent("MarchingCubeVertex.glsl", NULL, NULL, "MarchingCubeGeometry.glsl", "MarchingCubePixel.glsl", vInfo, numVIs, numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d)
 {
-	
+	MVector<4> t = {-16, -16, -16, 1};
+	transform = Translate(t);
 }
 
 MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
@@ -33,8 +34,6 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
 	//vertices will be thrown away.  But! For now, carry on.
 
 	VertexInfo *vIs = new VertexInfo[numVIs];
-	/*vIs[0].Set("Indices", false	, numElements * sizeof(GLuint)	, mfaces, VertexInfo::U_GL_STATIC_DRAW,
-			0,	0,	VertexInfo::DT_GL_UNSIGNED_INT,	false, 0, 0);*/
 	vIs[0].Set("VertexPosition"	, true	, 31 *31 *31 * 3 * sizeof(GLfloat)	, positions,	VertexInfo::U_GL_STATIC_DRAW,
 		1,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 
@@ -72,13 +71,11 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
 	tex3d->GiveData(data);
 	
 	return new MarchingCubeAsteroid(vIs, numVIs, numElements, tex3d);
-
-
 }
 
 void MarchingCubeAsteroid::EntitySpecificShaderSetup()
 {
-	shader->SetUniformMatrix("model", Matrix<4, 4>::Identity());
+	shader->SetUniformMatrix("model", transform);
 	tex3d->MakeActive(1);
 }
 
