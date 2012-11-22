@@ -1,9 +1,12 @@
 #version 420
 
+//layout( binding = 2 ) uniform sampler tileTex;
+//layout( binding = 3 ) uniform sampler tileNorm;
+
 in PixelData{
 	vec3 normal;
 	vec4 worldPos;
-	vec4 shapeColor;
+	vec4 shapeColor; //to be removed once texturing is working
 };
 
 //Must match Lights.h

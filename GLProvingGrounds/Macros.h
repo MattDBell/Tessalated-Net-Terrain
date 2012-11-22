@@ -4,11 +4,13 @@
 #include <GL\wglew.h>
 #include <stdio.h>
 
+void CheckErrors();
+
 #ifdef _DEBUG
 #define GLCALL( function ) function; CheckErrors()
 #else
 #define GLCALL( function ) function
 #endif
-void CheckErrors();
+
 
 #endif

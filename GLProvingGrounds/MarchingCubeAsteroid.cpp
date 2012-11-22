@@ -1,5 +1,6 @@
 #include "MarchingCubeAsteroid.h"
 #include <cstdlib>
+
 #define PACKFOUR(a, b, c, d) ((a << 24) | ((b & 0xff) << 16) | ((c & 0xff) << 8) | (d & 0xff))
 #define PACKSIXTEEN(a, b, c, d, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4) PACKFOUR(a, b, c, d), PACKFOUR(a2, b2, c2, d2), PACKFOUR(a3, b3, c3, d3), PACKFOUR(a4, b4, c4, d4)
 
