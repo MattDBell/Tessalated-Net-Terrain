@@ -1,12 +1,12 @@
 #version 420
 
-//layout( binding = 2 ) uniform sampler tileTex;
+layout( binding = 2 ) uniform sampler tileTex;
 //layout( binding = 3 ) uniform sampler tileNorm;
 
 in PixelData{
 	vec3 normal;
+	vec4 objectPos;
 	vec4 worldPos;
-	vec4 shapeColor; //to be removed once texturing is working
 };
 
 //Must match Lights.h
@@ -26,7 +26,11 @@ void main(void){
 		float intensity = clamp(dot(normal, normalize(lightDir).xyz), 0.0, 1.0);
 		diffuseColor +=  color[i] *intensity;
 	}
-
-	outColor = shapeColor;
-	outColor = outColor * diffuseColor;
+	float normalSum = normal.x + normal.y + normal.z;
+	vec3 planarTextureCoeffictions = vec3(  normal.x/normalSum, normal.y/normalSum, normal.z/normalSum );
+	vec4 xColor = Tex(tileTex, objectPos.yz);
+	vec4 yColor = Tex(tileTex, objectPos.zx);
+	vec4 zColor = Tex(tileTex, objectPos.xy);
+	outColor = xColor * planarTextureCoeffictions.x + yColor * planarTextureCoeffictions.y + zColor * planarTextureCoeffictions.z;
+	outColor = vec4(0.5, 0.5, 0.5, 1) * diffuseColor;
 }

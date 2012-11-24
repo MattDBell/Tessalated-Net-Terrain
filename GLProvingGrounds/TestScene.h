@@ -44,7 +44,7 @@ struct TestScene{
 		cube = TestCube::CreateCube();
 		cube->Initialize();
 
-		asteroid = MarchingCubeAsteroid::Create();
+		asteroid = MarchingCubeAsteroid::Create("Textures\\", "asteroid");
 		asteroid->Initialize();
 		
 		context->RegisterGraphComp(cube, 0);

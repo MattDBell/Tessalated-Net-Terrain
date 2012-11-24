@@ -1,5 +1,9 @@
+#include <Windows.h> //folder shtuff
 #include "MarchingCubeAsteroid.h"
 #include <cstdlib>
+#include <cstdio>
+#include <cassert>
+
 
 #define PACKFOUR(a, b, c, d) ((a << 24) | ((b & 0xff) << 16) | ((c & 0xff) << 8) | (d & 0xff))
 #define PACKSIXTEEN(a, b, c, d, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4) PACKFOUR(a, b, c, d), PACKFOUR(a2, b2, c2, d2), PACKFOUR(a3, b3, c3, d3), PACKFOUR(a4, b4, c4, d4)
@@ -13,7 +17,9 @@ MarchingCubeAsteroid::MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int n
 	transform = Translate(t);
 }
 
-MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
+MarchingCubeAsteroid* MarchingCubeAsteroid::Create(char * folderName, char* prefix){
+
+	//Static initialization
 	static bool firstRun = true;
 	if(firstRun){
 		PopulateTables();
@@ -21,6 +27,7 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
 	}
 	const int numVIs = 1;
 	
+	//Create raw position data
 	MVector<3>* positions = new MVector<3>[31*31*31];
 	for(int z = 0; z < 31; ++z){
 		for(int y = 0; y < 31; ++y){
@@ -37,6 +44,8 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
 	VertexInfo *vIs = new VertexInfo[numVIs];
 	vIs[0].Set("VertexPosition"	, true	, 31 *31 *31 * 3 * sizeof(GLfloat)	, positions,	VertexInfo::U_GL_STATIC_DRAW,
 		1,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
+
+	//Creation of Density field
 
 	Texture * tex3d = new Texture(Texture::TT_GL_TEXTURE_3D, GL_R32F); //This will definitely change.
 
@@ -70,10 +79,102 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(){
 	data.data		=&d;
 
 	tex3d->GiveData(data);
+
 	
-	return new MarchingCubeAsteroid(vIs, numVIs, numElements, tex3d);
+	MarchingCubeAsteroid* newMCA = new MarchingCubeAsteroid(vIs, numVIs, numElements, tex3d);
+	newMCA->LoadDiffuseNormalPairs(folderName,prefix);
+	return newMCA;
+}
+#pragma warning(push)
+#pragma warning(disable: 4996)
+void MarchingCubeAsteroid::LoadDiffuseNormalPairs(char * folderName, char* prefix)
+{
+	assert(folderName && prefix);
+
+	WCHAR path[256];
+	WCHAR fname[256];
+	WCHAR pre[32];
+	int folderNameLength = strlen(folderName) + 1;
+	assert(folderNameLength < 256);
+	mbstowcs(fname, folderName, folderNameLength);
+
+	int preLength = strlen(prefix) + 1;
+	assert(preLength < 32);
+	mbstowcs(pre, prefix, preLength);
+
+	memcpy(&fname[folderNameLength-1], pre, preLength * sizeof(WCHAR));
+
+	DWORD pathLength =GetCurrentDirectory(244, path);
+	path[pathLength++] = '\\';
+	assert(pathLength + folderNameLength < 256);
+	memcpy(&path[pathLength], fname, (folderNameLength + preLength -1 ) * sizeof(WCHAR));
+	path[pathLength + folderNameLength + preLength -2 ] = '*'; //two null characters are included in lengths
+	path[pathLength + folderNameLength + preLength -1 ] = '\0';
+
+	size_t maxOfMax =  max(MAXDIFFUSE, max(MAXNORMAL, MAXSPEC));
+	WIN32_FIND_DATA foundFile;
+	HANDLE search = FindFirstFile(path, &foundFile);
+	for(size_t i = 0; i < maxOfMax; ++i)
+	{
+		char fileName[260];
+		if( search == INVALID_HANDLE_VALUE || !wcstombs(fileName, foundFile.cFileName, 260))
+			break;
+		LoadTexture(folderName, fileName);
+		if(!FindNextFile(search, &foundFile)) break;
+	}
 }
 
+#pragma pack(push, 1)
+struct TGAHeader
+{
+	__int8		idLen;
+	__int8		colMap;
+	__int8		imgType;
+	__int16		colMapFirstEntryOff;
+	__int16		colMapLength;
+	__int8		colMapEntrySize;
+	__int16		xOrig;
+	__int16		yOrig;
+	__int16		width;
+	__int16		height;
+	__int8		bitsPerPixel;
+	__int8		imgDesc;
+};
+
+void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file)
+{
+	char relFile[256];
+	int folderSize = strlen(foldername);
+	memcpy(relFile, foldername, folderSize);
+	memcpy(&relFile[folderSize], file, 255 - folderSize);
+
+	//Ensure tga 2.0
+	char endOfFile[27];
+	FILE * f = fopen(relFile, "r");
+	fseek(f, 0, SEEK_END);
+	long offEnd = ftell(f);
+	rewind(f);
+	fseek(f, offEnd-26, SEEK_SET);
+	fread(endOfFile, 1, 26, f);
+	endOfFile[26] = '\0';
+	if(strcmp(&endOfFile[8], "TRUEVISION-XFILE."))
+		return; //My very simple reader does not deal with old TGAs, who do you think I am???
+	
+	//read header
+	rewind(f);
+	TGAHeader head;
+	fread(&head, 1, sizeof(head), f);
+
+	bool top = head.imgDesc & (1 << 5);
+	bool right = head.imgDesc & (1 << 4);
+	__int8 alphaDepth = head.imgDesc & 0xf;
+	
+	
+	
+	fclose(f);
+}
+#pragma pack(pop)
+#pragma warning(pop)
 void MarchingCubeAsteroid::EntitySpecificShaderSetup()
 {
 	shader->SetUniformMatrix("model", transform);

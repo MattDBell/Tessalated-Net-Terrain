@@ -132,6 +132,7 @@
   <ItemGroup>
     <None Include="CubePixel.glsl" />
     <None Include="CubeVertex.glsl" />
+    <None Include="Debugging.h" />
     <None Include="MarchingCubeGeometry.glsl" />
     <None Include="MarchingCubePixel.glsl" />
     <None Include="MarchingCubeVertex.glsl" />

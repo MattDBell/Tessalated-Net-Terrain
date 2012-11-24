@@ -40,8 +40,6 @@ in vec3 VertexPosition;
 void main(void){
 	vec4 position		= vec4(VertexPosition, 1);
 	gl_Position			= position;
-	gl_PointSize		= 1;
-	gl_ClipDistance[0]  = 0;
 //	outData.right		= model * vec4(1, 0, 0, 0);
 //	outData.up			= model * vec4(0, 1, 0, 0);
 //	outData.forward		= model * vec4(0, 0, 1, 0);

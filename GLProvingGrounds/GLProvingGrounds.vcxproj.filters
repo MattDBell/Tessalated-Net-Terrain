@@ -48,6 +48,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{493ee475-f075-4174-8888-f6c6a35b8bc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debugging">
+      <UniqueIdentifier>{174270cb-29df-4e66-a6f9-4c8056f6b9a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="CubePixel.glsl">
@@ -64,6 +67,9 @@
     </None>
     <None Include="MarchingCubePixel.glsl">
       <Filter>Shader</Filter>
+    </None>
+    <None Include="Debugging.h">
+      <Filter>Debugging</Filter>
     </None>
   </ItemGroup>
 </Project>
