@@ -15,7 +15,7 @@ struct LookupTables{
 #define MAXSPEC	   3
 
 class MarchingCubeAsteroid : public BasicGraphicsComponent{
-	
+	int numPairs;
 	Texture * tex3d;
 	Texture * texs[MAXDIFFUSE + MAXNORMAL + MAXSPEC + 1]; // These will be used for normals + diffuse + Spec pairs and a blend texture to (proc generated????!)blend between pairs.
 	Matrix<4, 4> transform;
@@ -23,7 +23,8 @@ class MarchingCubeAsteroid : public BasicGraphicsComponent{
 	static UniformBufferObject<LookupTables>* tables;
 	static void PopulateTables(); //Note, not in correct place.  Due to length of function this is at the bottom of the cpp.
 	void LoadDiffuseNormalPairs(char* folderName, char* prefix);
-	void LoadTexture(char* foldername, char* file);
+	void LoadTexture(char* foldername, char* file, char* prefix);
+	
 public:
 	static MarchingCubeAsteroid * Create(char* folderName, char* prefix);
 	virtual void EntitySpecificShaderSetup();

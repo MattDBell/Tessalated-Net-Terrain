@@ -132,3 +132,8 @@ void ShaderProgram::SetUniformVector(std::string name, MVector<3> value){
 	GLuint location = GetLocation(name);
 	GLCALL(glUniform3fv(location, 1, value.GetValues()));
 }
+void ShaderProgram::SetUniformInt(std::string name, int value)
+{
+	GLuint location = GetLocation(name);
+	GLCALL( glUniform1i(location, value) );
+}

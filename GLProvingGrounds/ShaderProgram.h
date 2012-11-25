@@ -30,6 +30,7 @@ public:
 	virtual void	SetUniformFloat(std::string name, float value);
 	virtual void	SetUniformMatrix(std::string name, Matrix<4, 4> value);
 	virtual void	SetUniformVector(std::string name, MVector<3> value);
+	virtual void	SetUniformInt(std::string name, int value);
 	virtual void	Update(float deltaTime);
 	virtual void	Bind();
 	virtual GLint	Link();

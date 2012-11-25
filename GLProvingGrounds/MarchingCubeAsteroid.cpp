@@ -11,7 +11,7 @@
 UniformBufferObject<LookupTables>* MarchingCubeAsteroid::tables = 0;
 
 MarchingCubeAsteroid::MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numElements, Texture* tex3d)
-	:BasicGraphicsComponent("MarchingCubeVertex.glsl", NULL, NULL, "MarchingCubeGeometry.glsl", "MarchingCubePixel.glsl", vInfo, numVIs, numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d)
+	:BasicGraphicsComponent("MarchingCubeVertex.glsl", NULL, NULL, "MarchingCubeGeometry.glsl", "MarchingCubePixel.glsl", vInfo, numVIs, numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d), numPairs(0)
 {
 	MVector<4> t = {-16, -16, -16, 1};
 	transform = Translate(t);
@@ -119,7 +119,7 @@ void MarchingCubeAsteroid::LoadDiffuseNormalPairs(char * folderName, char* prefi
 		char fileName[260];
 		if( search == INVALID_HANDLE_VALUE || !wcstombs(fileName, foundFile.cFileName, 260))
 			break;
-		LoadTexture(folderName, fileName);
+		LoadTexture(folderName, fileName, prefix);
 		if(!FindNextFile(search, &foundFile)) break;
 	}
 }
@@ -140,9 +140,28 @@ struct TGAHeader
 	__int8		bitsPerPixel;
 	__int8		imgDesc;
 };
-
-void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file)
+GLint GetFormat(int bpp, int imgType)
 {
+	switch (bpp)
+	{
+	case 24:
+		switch(imgType)
+		{
+		case 2:
+			return GL_RGB8;
+		case 10:
+			return GL_RGB8;
+		}
+
+	}
+	return 0;
+}
+void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefix)
+{
+	int pLen = strlen(prefix);
+	int number = (file[pLen + 1]) - '0';
+	int type = (file[pLen + 3] == 'c') ? 0 : file[pLen + 3] == 'n'? 1 : file[pLen + 3] == 's' ? 2 : 0xff;
+	
 	char relFile[256];
 	int folderSize = strlen(foldername);
 	memcpy(relFile, foldername, folderSize);
@@ -165,12 +184,110 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file)
 	TGAHeader head;
 	fread(&head, 1, sizeof(head), f);
 
-	bool top = head.imgDesc & (1 << 5);
-	bool right = head.imgDesc & (1 << 4);
+	bool top = ((head.imgDesc >> 5) & 1) == 1;
+	bool right = ((head.imgDesc >>4 & 1) << 4) == 1; 
 	__int8 alphaDepth = head.imgDesc & 0xf;
+	(alphaDepth);
+
+	char * imgID;
+	if(head.idLen)
+	{
+		imgID = new char[head.idLen];
+		fread(imgID, 1, head.idLen, f);
+	}
+	char * colMap;
+	if(head.colMapLength) 
+	{
+		colMap = new char[head.colMapLength * (head.colMapEntrySize+7) /8 ];
+		fread(colMap, 1, head.colMapLength * head.colMapEntrySize, f);
+	}
+	GLint gl_F =  GetFormat(head.bitsPerPixel, head.imgType);
+	assert(gl_F);
 	
 	
 	
+
+	float * data = new float[head.width * head.height * 3];
+	int curr = 0;
+	switch(head.imgType)
+	{
+	case 2:
+		for(int y = 0; y < head.height; ++y)
+		{
+			for(int x = 0; x < head.width; ++x)
+			{
+				int actX = right? (head.width -1 - x) : x;
+				int actY = top ? (head.height -1 - y) : y;
+				fread(&data[actX*3 + actY * head.width * 3], 4, 3, f);
+			}
+
+		}
+		break;
+	case 10:
+		
+		while( curr < head.width * head.height)
+		{
+			__int8 repCount = 0;
+			fread(&repCount, 1, 1, f);
+			bool raw = (repCount & 0x80) == 0;
+			int count = (repCount & 0x7f) + 1;
+			if(raw)
+			{
+				for(int i = 0; i < count; ++i)
+				{
+					int x = curr % head.width;
+					int y = curr / head.width;
+					int actX = right? (head.width -1 - x) : x;
+					int actY = top ? (head.height -1 - y) : y;
+					fread(&data[actX*3 + actY * head.width * 3], 4, 3, f);
+					++curr;
+				}
+			}
+			else
+			{
+				float value[3] = {0, 0, 0};
+				fread(&value, 4, 3, f);
+				for(int i = 0; i < count; ++i)
+				{
+					int x = curr % head.width;
+					int y = curr / head.width;
+					int actX = right? (head.width -1 - x) : x;
+					int actY = top ? (head.height -1 - y) : y;
+					memcpy(&data[actX * 3 + actY * head.width * 3], value, 12);
+					++curr;
+				}
+			}
+			
+			
+		}
+		break;
+	default:
+		assert(0);
+	}
+
+	int offset = type == 0? 0 : type ==1 ? MAXDIFFUSE : type == 2 ? MAXDIFFUSE + MAXNORMAL : 0xff;
+	if(offset == 0xff) return;
+	Texture * tex = new Texture(Texture::TT_GL_TEXTURE_2D, gl_F);
+
+	Texture::TexData td;
+	memset(&td, 0, sizeof(td));
+	td.data = data;
+	td.format = GL_RGB;
+	td.height = head.height;
+	td.width = head.width;
+	td.level = 0;
+	td.type = GL_UNSIGNED_BYTE;
+
+	tex->GiveData(td);
+	tex3d->SetParamInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	tex3d->SetParamInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	tex3d->SetParamInt(GL_TEXTURE_WRAP_S, GL_REPEAT);
+	tex3d->SetParamInt(GL_TEXTURE_WRAP_T, GL_REPEAT);
+	tex3d->SetParamInt(GL_TEXTURE_WRAP_R, GL_REPEAT);
+
+
+	texs[(number-1) + offset] = tex;
+	numPairs |= 1 << ((number-1) + offset);
 	fclose(f);
 }
 #pragma pack(pop)
@@ -178,6 +295,12 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file)
 void MarchingCubeAsteroid::EntitySpecificShaderSetup()
 {
 	shader->SetUniformMatrix("model", transform);
+	shader->SetUniformInt("TexMap", numPairs);
+	for(int i = 0; i < MAXDIFFUSE + MAXNORMAL + MAXSPEC; ++i)
+	{
+		if(((numPairs >> i) & 1) == 1)
+			texs[i]->MakeActive(i + 2); //first slot is for 3d tex
+	}
 	tex3d->MakeActive(1);
 }
 
