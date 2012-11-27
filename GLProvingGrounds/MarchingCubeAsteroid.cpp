@@ -225,7 +225,7 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 		break;
 	case 10:
 		
-		while( curr < head.width * head.height)
+		while( curr < head.width * head.height * 3)
 		{
 			__int8 repCount = 0;
 			fread(&repCount, 1, 1, f);
