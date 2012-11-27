@@ -93,8 +93,8 @@ void main(void)
 
 		vec4 wPoses[3];
 		wPoses[0] = model * verts[tris[i]];
-		wPoses[1] = model * verts[tris[i +1]];
-		wPoses[2] = model * verts[tris[i +2]];
+		wPoses[2] = model * verts[tris[i +1]];
+		wPoses[1] = model * verts[tris[i +2]];
 
 		normal = normalize( cross ( ( wPoses[1] - wPoses[0]).xyz, (wPoses[2] - wPoses[0]).xyz));
 

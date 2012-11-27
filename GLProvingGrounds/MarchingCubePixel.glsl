@@ -27,11 +27,11 @@ void main(void){
 		float intensity = clamp(dot(normal, normalize(lightDir).xyz), 0.0, 1.0);
 		diffuseColor +=  color[i] *intensity;
 	}
-	float normalSum = normal.x + normal.y + normal.z;
-	vec3 planarTextureCoeffictions = vec3(  normal.x/normalSum, normal.y/normalSum, normal.z/normalSum );
+	float normalSum = abs(normal.x) + abs(normal.y) + abs(normal.z);
+	vec3 planarTextureCoeffictions = vec3(  abs(normal.x)/normalSum, abs(normal.y)/normalSum, abs(normal.z)/normalSum );
 	vec4 xColor = texture(tileTex, objectPos.yz);
 	vec4 yColor = texture(tileTex, objectPos.zx);
 	vec4 zColor = texture(tileTex, objectPos.xy);
 	outColor = xColor * planarTextureCoeffictions.x + yColor * planarTextureCoeffictions.y + zColor * planarTextureCoeffictions.z;
-	//outColor = vec4(0.5, 0.5, 0.5, 1) * diffuseColor;
+	//outColor = vec4(1, 1, 1, 1);
 }

@@ -207,7 +207,7 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 	
 	
 
-	float * data = new float[head.width * head.height * 3];
+	__int8 * data = new __int8[head.width * head.height * 3];
 	int curr = 0;
 	switch(head.imgType)
 	{
@@ -218,7 +218,7 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 			{
 				int actX = right? (head.width -1 - x) : x;
 				int actY = top ? (head.height -1 - y) : y;
-				fread(&data[actX*3 + actY * head.width * 3], 4, 3, f);
+				fread(&data[actX*3 + actY * head.width * 3], sizeof(data[0]), 3, f);
 			}
 
 		}
@@ -239,14 +239,14 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 					int y = curr / head.width;
 					int actX = right? (head.width -1 - x) : x;
 					int actY = top ? (head.height -1 - y) : y;
-					fread(&data[actX*3 + actY * head.width * 3], 4, 3, f);
+					fread(&data[actX*3 + actY * head.width * 3], sizeof(data[0]), 3, f);
 					++curr;
 				}
 			}
 			else
 			{
-				float value[3] = {0, 0, 0};
-				fread(&value, 4, 3, f);
+				__int8 value[3] = {0, 0, 0};
+				fread(&value, sizeof(value[0]), 3, f);
 				for(int i = 0; i < count; ++i)
 				{
 					int x = curr % head.width;
