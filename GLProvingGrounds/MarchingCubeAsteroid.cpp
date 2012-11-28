@@ -209,13 +209,17 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 
 	__int8 * data = new __int8[head.width * head.height * 3];
 	int curr = 0;
+	int y = 0, x = 0;
 	switch(head.imgType)
 	{
 	case 2:
-		for(int y = 0; y < head.height; ++y)
+		
+		for(y = 0; y < head.height; ++y)
 		{
-			for(int x = 0; x < head.width; ++x)
+			for(x = 0; x < head.width; ++x)
 			{
+				assert(!ferror(f));
+				assert(!feof(f));
 				int actX = right? (head.width -1 - x) : x;
 				int actY = top ? (head.height -1 - y) : y;
 				fread(&data[actX*3 + actY * head.width * 3], sizeof(data[0]), 3, f);
@@ -225,7 +229,7 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 		break;
 	case 10:
 		
-		while( curr < head.width * head.height * 3)
+		while( curr < head.width * head.height)
 		{
 			__int8 repCount = 0;
 			fread(&repCount, 1, 1, f);
@@ -279,11 +283,11 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 	td.type = GL_UNSIGNED_BYTE;
 
 	tex->GiveData(td);
-	tex3d->SetParamInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	tex3d->SetParamInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_S, GL_REPEAT);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_T, GL_REPEAT);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_R, GL_REPEAT);
+	tex->SetParamInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	tex->SetParamInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	tex->SetParamInt(GL_TEXTURE_WRAP_S, GL_REPEAT);
+	tex->SetParamInt(GL_TEXTURE_WRAP_T, GL_REPEAT);
+	tex->SetParamInt(GL_TEXTURE_WRAP_R, GL_REPEAT);
 
 
 	texs[(number-1) + offset] = tex;
