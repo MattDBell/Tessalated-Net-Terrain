@@ -113,10 +113,9 @@ void MarchingCubeAsteroid::LoadDiffuseNormalPairs(char * folderName, char* prefi
 	path[pathLength + folderNameLength + preLength -2 ] = '*'; //two null characters are included in lengths
 	path[pathLength + folderNameLength + preLength -1 ] = '\0';
 
-	size_t maxOfMax =  max(MAXDIFFUSE, max(MAXNORMAL, MAXSPEC));
 	WIN32_FIND_DATA foundFile;
 	HANDLE search = FindFirstFile(path, &foundFile);
-	for(size_t i = 0; i < maxOfMax; ++i)
+	for(size_t i = 0; i < MAXDIFFUSE + MAXNORMAL + MAXSPEC ; ++i)
 	{
 		char fileName[260];
 		if( search == INVALID_HANDLE_VALUE || !wcstombs(fileName, foundFile.cFileName, 260))
@@ -232,49 +231,54 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 				}
 		
 			}
+			free(fInfo);
 		}
 		break;
 	case 10:
-		
-		while( curr < head.width * head.height)
 		{
-			__int8 repCount = 0;
-			fread(&repCount, 1, 1, f);
-			bool raw = (repCount & 0x80) == 0;
-			int count = (repCount & 0x7f) + 1;
-			if(raw)
+			int size = offEnd - ftell(f);
+			__int8* fInfo = new __int8[size];
+			fread(fInfo, 1, size, f);
+			int place = 0;
+			while( curr < head.width * head.height)
 			{
-				for(int i = 0; i < count; ++i)
+				__int8 repCount = 0;
+				fread(&repCount, 1, 1, f);
+				bool raw = (repCount & 0x80) == 0;
+				int count = (repCount & 0x7f) + 1;
+				if(raw)
 				{
-					int x = curr % head.width;
-					int y = curr / head.width;
-					int actX = right? (head.width -1 - x) : x;
-					int actY = top ? (head.height -1 - y) : y;
-					fread(&data[(actX )*3 + 2 + actY * head.width * 3], sizeof(data[0]), 1, f);
-					fread(&data[(actX )*3 + 1 + actY * head.width * 3], sizeof(data[0]), 1, f);
-					fread(&data[(actX )*3 + actY * head.width * 3], sizeof(data[0]), 1, f);
-					++curr;
+					for(int i = 0; i < count; ++i)
+					{
+						int x = curr % head.width;
+						int y = curr / head.width;
+						int actX = right? (head.width -1 - x) : x;
+						int actY = top ? (head.height -1 - y) : y;
+						fread(&data[(actX )*3 + 2 + actY * head.width * 3], sizeof(data[0]), 1, f);
+						fread(&data[(actX )*3 + 1 + actY * head.width * 3], sizeof(data[0]), 1, f);
+						fread(&data[(actX )*3 + actY * head.width * 3], sizeof(data[0]), 1, f);
+						++curr;
+					}
+				}
+				else
+				{
+					__int8 value[3] = {0, 0, 0};
+					fread(&value, sizeof(value[0]), 3, f);
+					__int8 v = value[0];
+					value[0] = value[2];
+					value[2] = v;
+					for(int i = 0; i < count; ++i)
+					{
+						int x = curr % head.width;
+						int y = curr / head.width;
+						int actX = right? (head.width -1 - x) : x;
+						int actY = top ? (head.height -1 - y) : y;
+						memcpy(&data[actX * 3 + actY * head.width * 3], value, 12);
+						++curr;
+					}
 				}
 			}
-			else
-			{
-				__int8 value[3] = {0, 0, 0};
-				fread(&value, sizeof(value[0]), 3, f);
-				__int8 v = value[0];
-				value[0] = value[2];
-				value[2] = v;
-				for(int i = 0; i < count; ++i)
-				{
-					int x = curr % head.width;
-					int y = curr / head.width;
-					int actX = right? (head.width -1 - x) : x;
-					int actY = top ? (head.height -1 - y) : y;
-					memcpy(&data[actX * 3 + actY * head.width * 3], value, 12);
-					++curr;
-				}
-			}
-			
-			
+			free(fInfo);
 		}
 		break;
 	default:

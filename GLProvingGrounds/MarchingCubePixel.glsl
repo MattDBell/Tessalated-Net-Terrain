@@ -38,5 +38,5 @@ void main(void){
 	
 	//vec4 zColor = vec4(objectPos.xy - ivec2(objectPos.xy), 0, 0);
 	outColor = xColor * planarTextureCoeffictions.x + yColor * planarTextureCoeffictions.y + zColor * planarTextureCoeffictions.z;
-	//outColor = vec4(1, 1, 1, 1);
+	outColor *= diffuseColor;
 }
