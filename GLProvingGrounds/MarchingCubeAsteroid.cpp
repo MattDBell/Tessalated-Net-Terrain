@@ -7,11 +7,12 @@
 
 #define PACKFOUR(a, b, c, d) ((a << 24) | ((b & 0xff) << 16) | ((c & 0xff) << 8) | (d & 0xff))
 #define PACKSIXTEEN(a, b, c, d, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4) PACKFOUR(a, b, c, d), PACKFOUR(a2, b2, c2, d2), PACKFOUR(a3, b3, c3, d3), PACKFOUR(a4, b4, c4, d4)
-
+const float PI = 3.1415926f;
 UniformBufferObject<LookupTables>* MarchingCubeAsteroid::tables = 0;
 
 MarchingCubeAsteroid::MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numElements, Texture* tex3d)
-	:BasicGraphicsComponent("MarchingCubeVertex.glsl", NULL, NULL, "MarchingCubeGeometry.glsl", "MarchingCubePixel.glsl", vInfo, numVIs, numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d), numPairs(0)
+	:BasicGraphicsComponent("MarchingCubeVertex.glsl", NULL, NULL, "MarchingCubeGeometry.glsl", "MarchingCubePixel.glsl", vInfo, numVIs, 
+	numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d), numPairs(0), time(0)
 {
 	MVector<4> t = {-16, -16, -16, 1};
 	transform = Translate(t);
@@ -58,13 +59,14 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(char * folderName, char* pref
 	Texture::TexData data;
 	memset(&data, 0, sizeof(Texture::TexData));
 
-	MVector<3> center = {16.0f, 16.0f, 16.0f};
 	GLfloat d[32 * 32 * 32];
 	for(int z = 0; z < 32; ++z){
 		for(int y = 0; y < 32; ++y){
 			for(int x = 0; x < 32; ++x){
-				MVector<3> pos = {(float)x, (float)y, (float)z};
-				d[x + y *32 + z * 32 * 32] =10.0f - (pos-center).Length();// (float)((rand() % 10) -7);
+				MVector<3> center = {16.0f, 16.0f, 16.0f}; MVector<3> pos = {(float)x, (float)y, (float)z}; d[x + y *32 + z * 32 * 32] = 10.0f - (pos-center).Length() + (rand() % 100) / 100.0f ;
+				//d[x + y *32 + z * 32 * 32] =(float)((rand() % 10) -7);
+				//d[x + y *32 + z * 32 * 32] = (float) y -10;
+				//d[x + y *32 + z * 32 * 32] = (float) z -10;
 			}
 		}
 	}
@@ -213,18 +215,23 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 	switch(head.imgType)
 	{
 	case 2:
-		
-		for(y = 0; y < head.height; ++y)
 		{
-			for(x = 0; x < head.width; ++x)
+			__int8 * fInfo = new __int8[head.width * head.height * 3];
+			fread(&fInfo[0], 3, head.width * head.height, f);
+			for(y = 0; y < head.height; ++y)
 			{
-				assert(!ferror(f));
-				assert(!feof(f));
-				int actX = right? (head.width -1 - x) : x;
-				int actY = top ? (head.height -1 - y) : y;
-				fread(&data[actX*3 + actY * head.width * 3], sizeof(data[0]), 3, f);
+				for(x = 0; x < head.width; ++x)
+				{
+					
+					
+					int actX = right? (head.width -1 - x) : x;
+					int actY = top ? (head.height -1 - y) : y;
+					data[(actX )*3 + 2 + actY * head.width * 3]	= fInfo[x * 3 + y * head.width * 3];
+					data[(actX )*3 + 1 + actY * head.width * 3]	= fInfo[x * 3 + y * head.width * 3 + 1];
+					data[(actX )*3 + actY * head.width * 3]		= fInfo[x * 3 + y * head.width * 3 + 2];
+				}
+		
 			}
-
 		}
 		break;
 	case 10:
@@ -243,7 +250,9 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 					int y = curr / head.width;
 					int actX = right? (head.width -1 - x) : x;
 					int actY = top ? (head.height -1 - y) : y;
-					fread(&data[actX*3 + actY * head.width * 3], sizeof(data[0]), 3, f);
+					fread(&data[(actX )*3 + 2 + actY * head.width * 3], sizeof(data[0]), 1, f);
+					fread(&data[(actX )*3 + 1 + actY * head.width * 3], sizeof(data[0]), 1, f);
+					fread(&data[(actX )*3 + actY * head.width * 3], sizeof(data[0]), 1, f);
 					++curr;
 				}
 			}
@@ -251,6 +260,9 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 			{
 				__int8 value[3] = {0, 0, 0};
 				fread(&value, sizeof(value[0]), 3, f);
+				__int8 v = value[0];
+				value[0] = value[2];
+				value[2] = v;
 				for(int i = 0; i < count; ++i)
 				{
 					int x = curr % head.width;
@@ -300,6 +312,7 @@ void MarchingCubeAsteroid::EntitySpecificShaderSetup()
 {
 	shader->SetUniformMatrix("model", transform);
 	shader->SetUniformInt("TexMap", numPairs);
+	shader->SetUniformFloat("time", time);
 	for(int i = 0; i < MAXDIFFUSE + MAXNORMAL + MAXSPEC; ++i)
 	{
 		if(((numPairs >> i) & 1) == 1)
@@ -310,6 +323,47 @@ void MarchingCubeAsteroid::EntitySpecificShaderSetup()
 
 void MarchingCubeAsteroid::Render(int pass){
 	BasicGraphicsComponent::Render(pass);
+}
+
+void MarchingCubeAsteroid::Update(float dt){
+	static bool shrink = true;
+	dt = shrink? -dt : dt;
+	time += dt;
+	if(time > 10)
+	{
+		shrink = true;
+		time = 10;
+	} else if (time < 0)
+	{
+		shrink = false;
+		time = 0;
+	}
+	//time = time > 10 ? time - 10 : time;
+	
+	GLfloat d[32 * 32 * 32];
+	for(int z = 0; z < 32; ++z){
+		for(int y = 0; y < 32; ++y){
+			for(int x = 0; x < 32; ++x){
+				MVector<3> center = {16.0f, 16.0f, 16.0f}; MVector<3> pos = {(float)x, (float)y, (float)z}; d[x + y *32 + z * 32 * 32] = 3 + time - (pos-center).Length() + cos(x + time);// + (rand() % 100) / 100.0f ;
+				//d[x + y *32 + z * 32 * 32] =(float)((rand() % 10) -7);
+				//d[x + y *32 + z * 32 * 32] = (float) y -10 + cos(x + time) * sin(z + time);
+				//d[x + y *32 + z * 32 * 32] = (float) z -10;
+				//d[x + y *32 + z * 32 * 32] = cos(x + time) * cos( y + time) * cos(z + time);
+			}
+		}
+	}
+	Texture::TexData data;
+	memset(&data, 0, sizeof(data));
+	data.depth		= 32;
+	data.width		= 32;
+	data.height		= 32;
+
+	data.level		= 0;
+	data.format		= GL_RED;
+	data.type		= GL_FLOAT;
+	data.data		=&d;
+
+	tex3d->GiveData(data);
 }
 
 void MarchingCubeAsteroid::PopulateTables(){

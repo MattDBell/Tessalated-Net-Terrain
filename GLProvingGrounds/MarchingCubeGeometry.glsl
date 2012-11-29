@@ -16,10 +16,10 @@ layout(points) in;
 layout(triangle_strip, max_vertices = 15) out;
 
 uniform mat4 model;
-
+uniform float time;
 out PixelData{
 	vec3 normal;
-	vec4 objectPos;
+	noperspective vec4 objectPos;
 	vec4 worldPos;
 };
 
@@ -34,14 +34,14 @@ void main(void)
 	
 	uint gridIndex = 0;
 	float[8] value;
-	value[0] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[0].xyz), 0).r;
-	value[1] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[1].xyz), 0).r;
-	value[2] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[2].xyz), 0).r;
-	value[3] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[3].xyz), 0).r;
-	value[4] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[4].xyz), 0).r;
-	value[5] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[5].xyz), 0).r;
-	value[6] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[6].xyz), 0).r;
-	value[7] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[7].xyz), 0).r;
+	value[0] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[0].xyz), 0).r ;
+	value[1] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[1].xyz), 0).r ;
+	value[2] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[2].xyz), 0).r ;
+	value[3] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[3].xyz), 0).r ;
+	value[4] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[4].xyz), 0).r ;
+	value[5] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[5].xyz), 0).r ;
+	value[6] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[6].xyz), 0).r ;
+	value[7] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[7].xyz), 0).r ;
 	
 	for(int i = 0; i < 8; ++i)
 	{	
@@ -103,16 +103,15 @@ void main(void)
 		gl_Position = proj * view * worldPos;
 		EmitVertex();
 
-		objectPos = verts[tris[i + 1]];
+		objectPos = verts[tris[i + 2]];
 		worldPos = wPoses[1];
 		gl_Position = proj * view * worldPos;
 		EmitVertex();
 
-		objectPos = verts[tris[i + 2]];
+		objectPos = verts[tris[i + 1]];
 		worldPos = wPoses[2];
 		gl_Position = proj * view * worldPos;
 		EmitVertex();
-		
 		
 		EndPrimitive();
 	

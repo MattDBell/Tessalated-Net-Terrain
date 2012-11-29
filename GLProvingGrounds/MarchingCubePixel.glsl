@@ -5,7 +5,7 @@ layout( binding = 2 ) uniform sampler2D tileTex;
 
 in PixelData{
 	vec3 normal;
-	vec4 objectPos;
+	noperspective vec4 objectPos;
 	vec4 worldPos;
 };
 
@@ -29,9 +29,14 @@ void main(void){
 	}
 	float normalSum = abs(normal.x) + abs(normal.y) + abs(normal.z);
 	vec3 planarTextureCoeffictions = vec3(  abs(normal.x)/normalSum, abs(normal.y)/normalSum, abs(normal.z)/normalSum );
-	vec4 xColor = texture(tileTex, objectPos.yz);
-	vec4 yColor = texture(tileTex, objectPos.zx);
-	vec4 zColor = texture(tileTex, objectPos.xy);
+	//vec4 xColor = vec4(1, 0, 0, 1);
+	//vec4 yColor = vec4(0, 1, 0, 1);
+	//vec4 zColor = vec4(0, 0, 1, 1);
+	vec4 xColor = texture(tileTex, objectPos.yz * 0.25);
+	vec4 yColor = texture(tileTex, objectPos.zx * 0.25);
+	vec4 zColor = texture(tileTex, objectPos.yx * 0.25);
+	
+	//vec4 zColor = vec4(objectPos.xy - ivec2(objectPos.xy), 0, 0);
 	outColor = xColor * planarTextureCoeffictions.x + yColor * planarTextureCoeffictions.y + zColor * planarTextureCoeffictions.z;
 	//outColor = vec4(1, 1, 1, 1);
 }

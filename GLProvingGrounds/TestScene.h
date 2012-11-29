@@ -54,6 +54,7 @@ struct TestScene{
 		delete cam;
 		delete cube;
 		delete light;
+		delete asteroid;
 	}
 	void Update(float dT){
 
@@ -70,16 +71,17 @@ struct TestScene{
 			elevation -= dT;
 		}
 		if(Input::Get()->GetKey('Q')){
-			distance += dT;
+			distance += dT * 10.0f;
 		}
 		if(Input::Get()->GetKey('E')){
-			distance-= dT;
+			distance-= dT* 10.0f;
 		}
 		elevation = elevation > 0.9f ? 0.9f : elevation < -0.9f ? -0.9f : elevation;
 		MVector<3> camPos= { cos(elevation) * cos(azimuth) * distance, sin(elevation)* distance, cos(elevation) * sin(azimuth)* distance};
 		MVector<3> upVec = {0, 1, 0};
 		cam->LookAt(camPos, lookAt, upVec);
 		cam->SetCurrent();
+		asteroid->Update(dT);
 	}
 };
 #endif

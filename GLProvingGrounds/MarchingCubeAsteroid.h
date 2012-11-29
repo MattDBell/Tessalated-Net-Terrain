@@ -16,6 +16,7 @@ struct LookupTables{
 
 class MarchingCubeAsteroid : public BasicGraphicsComponent{
 	int numPairs;
+	float time;
 	Texture * tex3d;
 	Texture * texs[MAXDIFFUSE + MAXNORMAL + MAXSPEC + 1]; // These will be used for normals + diffuse + Spec pairs and a blend texture to (proc generated????!)blend between pairs.
 	Matrix<4, 4> transform;
@@ -29,6 +30,7 @@ public:
 	static MarchingCubeAsteroid * Create(char* folderName, char* prefix);
 	virtual void EntitySpecificShaderSetup();
 	virtual void Render(int pass);
+	void Update(float dt);
 
 };
 
