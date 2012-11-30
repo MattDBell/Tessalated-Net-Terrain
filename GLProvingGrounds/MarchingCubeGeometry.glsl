@@ -48,12 +48,12 @@ void main(void)
 		if(value[i] < isoLevel) gridIndex |= (1 << i);
 	}
 
-	uint edge = edgeTable[gridIndex >> 2U][gridIndex  & 3U];
+	uint edge = edgeTable[gridIndex / 4][gridIndex  % 4];
 	vec4 verts[12];
 	uint ver2s[12] = {1, 2, 3, 0, 5, 6, 7, 4, 0, 1, 2, 3};
 	for(uint i = 0; i < 12; ++i)
 	{
-		if(((edge >> i) &1) == 1U)
+		if(((edge / uint(pow(2, i)))  % 2) == 1U)
 		{
 			uint ver1;
 			if(i < 8){
