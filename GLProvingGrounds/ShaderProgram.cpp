@@ -2,6 +2,7 @@
 #include <fstream>
 #include "Macros.h"
 #include "UniformBufferObject.h"
+#include "Debugging.h"
 
 ShaderProgram * ShaderProgram::current = NULL;
 ShaderProgram::ShaderProgram(){
@@ -61,6 +62,7 @@ GLint ShaderProgram::Link(){
 			return result;
 		log = new GLchar[length];
 		GLCALL(glGetProgramInfoLog(buffer, length, &result, log));
+		LOG("Graphics.log", log);
 		delete[] log;
 		GLCALL(glDeleteProgram(buffer));
 		return GL_FALSE;
@@ -75,6 +77,7 @@ void ShaderProgram::DebugShader(GLuint buffer){
 		GLsizei strlen;
 		GLchar * info = new GLchar[logLen];
 		GLCALL(glGetShaderInfoLog(buffer, logLen, &strlen, info));
+		LOG("Graphics.log", info);
 		delete [] info;
 	}
 }

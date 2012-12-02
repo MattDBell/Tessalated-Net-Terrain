@@ -55,8 +55,7 @@ void main(void){
 	//
 	//vec3 zTan = vec3(-normal.z, normal.y, normal.x);
 	//vec3 zCoTan = vec3(normal.x, -normal.z, normal.y);
-
-	//normal = normalize(normal + vec3(0, xBump.x, xBump.y) * planarTextureCoefficients.xxx + vec3(yBump.y, 0, yBump.x) *planarTextureCoefficients.yyy + vec3(zBump.x, zBump.y, 0) * planarTextureCoefficients.zzz);
+	normal = normalize(normal + vec3(0, xBump.x, xBump.y) * planarTextureCoefficients.xxx + vec3(yBump.y, 0, yBump.x) *planarTextureCoefficients.yyy + vec3(zBump.x, zBump.y, 0) * planarTextureCoefficients.zzz);
 
 	vec4 diffuseColor = vec4(0, 0, 0, 1);
 	for(int i = 0; i < 10; ++i){

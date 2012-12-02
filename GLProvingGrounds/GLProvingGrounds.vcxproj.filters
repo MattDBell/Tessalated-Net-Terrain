@@ -17,6 +17,9 @@
     <ClCompile Include="Macros.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="MarchingCubeAsteroid.cpp" />
+    <ClCompile Include="Debugging.cpp">
+      <Filter>Debugging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicGraphicsComponent.h" />

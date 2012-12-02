@@ -6,6 +6,7 @@
 //Test CPP
 GraphicsContext graphics;
 bool running = true;
+#include "Debugging.h"
 
 HINSTANCE hInstance;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
@@ -87,6 +88,7 @@ int WINAPI WinMain (HINSTANCE, HINSTANCE,
 	std::clock_t beginning;
 	std::clock_t end;
 	float deltaTime = 0.0f;
+	LOG("main.log", "Entering Main Loop");
 	while (running){
 		beginning = std::clock();
 		while(PeekMessage(&msg, NULL, 0,0, PM_REMOVE)){
@@ -105,6 +107,7 @@ int WINAPI WinMain (HINSTANCE, HINSTANCE,
 		end = std::clock();
 		deltaTime = (float)(end- beginning) / CLOCKS_PER_SEC;
 	}
+	Debugging::Flush();
 	delete scene;
 	return (int) msg.wParam;
 }

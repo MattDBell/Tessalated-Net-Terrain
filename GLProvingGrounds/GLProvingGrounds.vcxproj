@@ -132,6 +132,9 @@
   <ItemGroup>
     <None Include="CubePixel.glsl" />
     <None Include="CubeVertex.glsl" />
+    <ClCompile Include="Debugging.cpp">
+      <FileType>Document</FileType>
+    </ClCompile>
     <None Include="Debugging.h" />
     <None Include="MarchingCubeGeometry.glsl" />
     <None Include="MarchingCubePixel.glsl" />
