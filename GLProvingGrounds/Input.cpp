@@ -1,4 +1,5 @@
 #include "Input.h"
+#include <Windowsx.h>
 
 Input * Input::instance = 0;
 
@@ -27,6 +28,23 @@ void Input::UpdateWith(WPARAM key, bool to){
 	if(key >= 0 && key <256)
 		keyStates[key] = to;
 
+}
+void Input::LMouseUpdate(LPARAM position, bool to)
+{
+	mxPos = GET_X_LPARAM(position);
+	myPos = GET_Y_LPARAM(position);
+	mState = to;
+}
+void Input::MousePosUpdate(LPARAM position)
+{
+	mxPos = GET_X_LPARAM(position);
+	myPos = GET_Y_LPARAM(position);
+}
+bool Input::GetLastMousePos(int & outX, int &outY)
+{
+	outX = mxPos;
+	outY = myPos;
+	return mState;
 }
 bool Input::GetKey(unsigned int key){
 	return bool(keyStates[key]);

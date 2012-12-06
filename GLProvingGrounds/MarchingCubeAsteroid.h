@@ -14,9 +14,23 @@ struct LookupTables{
 #define MAXNORMAL  3
 #define MAXSPEC	   3
 
+enum States
+{
+	SINE_WAVE_THING,
+	MESS,
+	FACETEDSPHERE,
+	SPHERE,
+	TERRAIN,
+	MALLEABLE,
+	TOTAL
+};
+
 class MarchingCubeAsteroid : public BasicGraphicsComponent{
+	
+	States updateState;
+	int randSeed;
 	int numPairs;
-	float time;
+	float currtime;
 	Texture * tex3d;
 	Texture * texs[MAXDIFFUSE + MAXNORMAL + MAXSPEC + 1]; // These will be used for normals + diffuse + Spec pairs and a blend texture to (proc generated????!)blend between pairs.
 	Matrix<4, 4> transform;
@@ -27,10 +41,13 @@ class MarchingCubeAsteroid : public BasicGraphicsComponent{
 	void LoadTexture(char* foldername, char* file, char* prefix);
 	
 public:
+	
 	static MarchingCubeAsteroid * Create(char* folderName, char* prefix);
 	virtual void EntitySpecificShaderSetup();
 	virtual void Render(int pass);
 	void Update(float dt);
+	void SetState(States to);
+	States GetState() { return updateState; }
 
 };
 

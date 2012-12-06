@@ -26,6 +26,7 @@ layout ( std140 ) uniform CamMats{
 };
 
 
+uniform int state;
 
 in vec3 VertexPosition;
 
@@ -39,7 +40,15 @@ in vec3 VertexPosition;
 
 void main(void){
 	vec4 position		= vec4(VertexPosition, 1);
-	gl_Position			= position;
+	int yPos = int(position.y + 0.5);
+	if(state == 5)
+		gl_Position	= 
+		vec4(position.x + float(32 * ((yPos /8 ) % 2)), 
+		float(yPos % 8) , 
+		position.z + float(32 * ((yPos /16) %2 )),
+		 1);
+	else
+		gl_Position = position;
 //	outData.right		= model * vec4(1, 0, 0, 0);
 //	outData.up			= model * vec4(0, 1, 0, 0);
 //	outData.forward		= model * vec4(0, 0, 1, 0);

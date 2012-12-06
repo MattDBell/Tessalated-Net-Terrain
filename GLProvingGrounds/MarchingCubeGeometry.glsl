@@ -17,11 +17,20 @@ layout(triangle_strip, max_vertices = 15) out;
 
 uniform mat4 model;
 uniform float time;
+uniform int state;
 out PixelData{
 	vec3 normal;
 	noperspective vec4 objectPos;
 	vec4 worldPos;
 };
+
+float GetValueAt(ivec3 pos)
+{
+	if(state == 5)
+		return -1.0  + (pos.x % 4);  
+	else
+		return texelFetch(samp, pos , 0).r; 
+}
 
 void main(void)
 {
@@ -34,14 +43,14 @@ void main(void)
 	
 	uint gridIndex = 0;
 	float[8] value;
-	value[0] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[0].xyz), 0).r ;
-	value[1] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[1].xyz), 0).r ;
-	value[2] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[2].xyz), 0).r ;
-	value[3] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[3].xyz), 0).r ;
-	value[4] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[4].xyz), 0).r ;
-	value[5] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[5].xyz), 0).r ;
-	value[6] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[6].xyz), 0).r ;
-	value[7] = texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[7].xyz), 0).r ;
+	value[0] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[0].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[0].xyz), 0).r ;
+	value[1] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[1].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[1].xyz), 0).r ;
+	value[2] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[2].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[2].xyz), 0).r ;
+	value[3] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[3].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[3].xyz), 0).r ;
+	value[4] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[4].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[4].xyz), 0).r ;
+	value[5] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[5].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[5].xyz), 0).r ;
+	value[6] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[6].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[6].xyz), 0).r ;
+	value[7] =	GetValueAt( ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[7].xyz));	// texelFetch(samp, ivec3( ( gl_in[0].gl_Position.xyz ) + diffs[7].xyz), 0).r ;
 	
 	for(int i = 0; i < 8; ++i)
 	{	

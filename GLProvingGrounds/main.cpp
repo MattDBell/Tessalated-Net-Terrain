@@ -32,6 +32,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+	case WM_LBUTTONDOWN:
+		Input::Get()->LMouseUpdate(lParam, true);
+		break;
+	case WM_LBUTTONUP:
+		Input::Get()->LMouseUpdate(lParam, false);
+	case WM_MOUSEMOVE:
+		Input::Get()->MousePosUpdate(lParam);
+		break;
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -80,9 +88,9 @@ int WINAPI WinMain (HINSTANCE, HINSTANCE,
 	wchar_t wcstring[newsize];
 	mbstowcs_s(&convertedChars, wcstring, origsize, orig, _TRUNCATE);
 
-	createWindow(wcstring, 500, 500);
+	createWindow(wcstring, 780, 780);
 
-	graphics.ResizeWindow(500, 500);
+	graphics.ResizeWindow(780, 780);
 	
 	scene = new TestScene(&graphics);
 	std::clock_t beginning;

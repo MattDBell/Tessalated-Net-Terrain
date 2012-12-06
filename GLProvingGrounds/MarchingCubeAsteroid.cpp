@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
+#include <ctime>
+#include "Input.h"
 
 
 #define PACKFOUR(a, b, c, d) ((a << 24) | ((b & 0xff) << 16) | ((c & 0xff) << 8) | (d & 0xff))
@@ -12,7 +14,7 @@ UniformBufferObject<LookupTables>* MarchingCubeAsteroid::tables = 0;
 
 MarchingCubeAsteroid::MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numElements, Texture* tex3d)
 	:BasicGraphicsComponent("MarchingCubeVertex.glsl", NULL, NULL, "MarchingCubeGeometry.glsl", "MarchingCubePixel.glsl", vInfo, numVIs, 
-	numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d), numPairs(0), time(0)
+	numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d), numPairs(0), currtime(0), updateState(SPHERE)
 {
 	MVector<4> t = {-16, -16, -16, 1};
 	transform = Translate(t);
@@ -63,7 +65,7 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(char * folderName, char* pref
 	for(int z = 0; z < 32; ++z){
 		for(int y = 0; y < 32; ++y){
 			for(int x = 0; x < 32; ++x){
-				MVector<3> center = {16.0f, 16.0f, 16.0f}; MVector<3> pos = {(float)x, (float)y, (float)z}; d[x + y *32 + z * 32 * 32] = 10.0f - (pos-center).Length() + (rand() % 100) / 100.0f ;
+				MVector<3> center = {16.0f, 16.0f, 16.0f}; MVector<3> pos = {(float)x, (float)y, (float)z}; d[x + y *32 + z * 32 * 32] = 10.0f - (pos-center).Length();// + (rand() % 100) / 100.0f ;
 				//d[x + y *32 + z * 32 * 32] =(float)((rand() % 10) -7);
 				//d[x + y *32 + z * 32 * 32] = (float) y -10;
 				//d[x + y *32 + z * 32 * 32] = (float) z -10;
@@ -312,7 +314,8 @@ void MarchingCubeAsteroid::EntitySpecificShaderSetup()
 {
 	shader->SetUniformMatrix("model", transform);
 	shader->SetUniformInt("TexMap", numPairs);
-	shader->SetUniformFloat("time", time);
+	shader->SetUniformFloat("time", currtime);
+	shader->SetUniformInt("state", (int)updateState);
 	for(int i = 0; i < MAXDIFFUSE + MAXNORMAL + MAXSPEC; ++i)
 	{
 		if(((numPairs >> i) & 1) == 1)
@@ -325,46 +328,98 @@ void MarchingCubeAsteroid::Render(int pass){
 	BasicGraphicsComponent::Render(pass);
 }
 
-void MarchingCubeAsteroid::Update(float /*dt*/){
-	return;
-	//static bool shrink = true;
-	//dt = shrink? -dt : dt;
-	//time += dt;
-	//if(time > 10)
-	//{
-	//	shrink = true;
-	//	time = 10;
-	//} else if (time < 0)
-	//{
-	//	shrink = false;
-	//	time = 0;
-	//}
-	////time = time > 10 ? time - 10 : time;
-	//
-	//GLfloat d[32 * 32 * 32];
-	//for(int z = 0; z < 32; ++z){
-	//	for(int y = 0; y < 32; ++y){
-	//		for(int x = 0; x < 32; ++x){
-	//			MVector<3> center = {16.0f, 16.0f, 16.0f}; MVector<3> pos = {(float)x, (float)y, (float)z}; d[x + y *32 + z * 32 * 32] = 3 + time - (pos-center).Length() + cos(x + time);// + (rand() % 100) / 100.0f ;
-	//			//d[x + y *32 + z * 32 * 32] =(float)((rand() % 10) -7);
-	//			//d[x + y *32 + z * 32 * 32] = (float) y -10 + cos(x + time) * sin(z + time);
-	//			//d[x + y *32 + z * 32 * 32] = (float) z -10;
-	//			//d[x + y *32 + z * 32 * 32] = cos(x + time) * cos( y + time) * cos(z + time);
-	//		}
-	//	}
-	//}
-	//Texture::TexData data;
-	//memset(&data, 0, sizeof(data));
-	//data.depth		= 32;
-	//data.width		= 32;
-	//data.height		= 32;
-	//
-	//data.level		= 0;
-	//data.format		= GL_RED;
-	//data.type		= GL_FLOAT;
-	//data.data		=&d;
-	//
-	//tex3d->GiveData(data);
+void MarchingCubeAsteroid::Update(float dt){
+	//return;
+	static bool shrink = false;
+	dt = shrink? -dt : dt;
+	currtime += dt;
+	srand(randSeed);
+	static GLfloat d[32 * 32 * 32];
+	for(int z = 0; z < 32; ++z){
+		for(int y = 0; y < 32; ++y){
+			for(int x = 0; x < 32; ++x){
+				switch(updateState)
+				{
+				case SINE_WAVE_THING:
+				default:
+					{
+						if(currtime > 10.0f) 
+						{
+							currtime = 10;
+							shrink = true;
+						} else if (currtime < 0)
+						{
+							currtime = 0;
+							shrink = false;
+						}
+						MVector<3> center = {16.0f, 16.0f, 16.0f};
+						MVector<3> pos = {(float)x, (float)y, (float)z};
+						d[x + y *32 + z * 32 * 32] = 3 + currtime - (pos-center).Length() + cos(x + currtime) + (rand() % 100) / 100.0f ;
+					}
+					break;
+				case MESS:
+					{
+						d[x + y *32 + z * 32 * 32] =(float)((rand() % 10) -7);
+					}
+					break;
+				case FACETEDSPHERE:
+					{
+						MVector<3> center = {16.0f, 16.0f, 16.0f};
+						MVector<3> pos = {(float)x, (float)y, (float)z};
+						d[x + y *32 + z * 32 * 32] =  10 - (pos-center).Length() + (rand() % 100) / 100.0f;
+					}
+					break;
+				case SPHERE:
+					{
+						MVector<3> center = {16.0f, 16.0f, 16.0f};
+						MVector<3> pos = {(float)x, (float)y, (float)z};
+						d[x + y *32 + z * 32 * 32] =  10 - (pos-center).Length();
+					}
+					break;
+				case MALLEABLE:
+					{
+						static bool lastState = false;
+						int xPos, yPos;
+						bool currState = Input::Get()->GetLastMousePos(xPos, yPos);
+						if(lastState == true && lastState != currState)
+						{
+							//deproject x, y
+							//cast to start of ME!
+							//Step through until I hit something
+							//sphere cast(ish)
+						}
+						lastState = currState;
+					}
+					break;
+				case TERRAIN:
+					//do nothing
+					break;
+				}
+			}
+		}
+	}
+	Texture::TexData data;
+	memset(&data, 0, sizeof(data));
+	data.depth		= 32;
+	data.width		= 32;
+	data.height		= 32;
+	
+	data.level		= 0;
+	data.format		= GL_RED;
+	data.type		= GL_FLOAT;
+	data.data		=&d;
+	
+	tex3d->GiveData(data);
+}
+void MarchingCubeAsteroid::SetState(States to)
+{
+	if(to == updateState) return;
+	if((unsigned int) to < TOTAL)
+		updateState = to;
+	else
+		updateState = SPHERE;
+	srand( (unsigned int) time(NULL) ) ;
+	randSeed = rand();
 }
 
 void MarchingCubeAsteroid::PopulateTables(){

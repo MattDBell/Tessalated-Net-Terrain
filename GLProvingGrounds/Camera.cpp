@@ -3,6 +3,7 @@
 
 
 UniformBufferObject<Camera::cameraMatrices>* Camera::cameraUBO = NULL;
+Camera* Camera::current = NULL;
 
 Camera::Camera(){
 	if(cameraUBO == NULL){
@@ -87,4 +88,9 @@ void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<
 }
 void Camera::SetCurrent(){
 	Camera::cameraUBO->Update(&matrices);
+	current = this;
+}
+MVector<3> Camera::Deproject(int x, int y)
+{
+
 }

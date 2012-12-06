@@ -10,15 +10,16 @@ layout( binding = 8 ) uniform sampler2D		xTileSpec;
 layout( binding = 9 ) uniform sampler2D		yTileSpec;
 layout( binding = 10 ) uniform sampler2D	zTileSpec;
 
-
-
-
 in PixelData{
 	vec3 normal;
 	noperspective vec4 objectPos;
 	vec4 worldPos;
 };
 
+layout ( std140 ) uniform CamMats{
+	mat4 view;
+	mat4 proj;
+};
 //Must match Lights.h
 #define MAXLIGHTS 10
 
@@ -32,6 +33,8 @@ layout ( std140 ) uniform Lights{
 out vec4 outColor;
 void main(void){
 
+	vec4 viewDir = vec4(view[3]);
+	viewDir = normalize(worldPos - viewDir);
 	float normalSum = abs(normal.x) + abs(normal.y) + abs(normal.z);
 	vec3 planarTextureCoefficients = vec3(  abs(normal.x)/normalSum, abs(normal.y)/normalSum, abs(normal.z)/normalSum );
 	
@@ -39,13 +42,16 @@ void main(void){
 	vec2 yTex = objectPos.zx * 0.25;
 	vec2 zTex = objectPos.yx * 0.25;
 
-	vec4 xColor = texture(xTileTex, xTex);
+	vec4 xColor =  texture(xTileTex, xTex);
 	vec4 yColor = texture(yTileTex, yTex);
 	vec4 zColor = texture(zTileTex, zTex);
+
 
 	vec2 xBump = texture(xTileNorm, xTex).xy;
 	vec2 yBump = texture(yTileNorm, yTex).xy;
 	vec2 zBump = texture(zTileNorm, zTex).xy;
+
+	//float specValue = texture(xTileSpec, xTex).r * planarTextureCoefficients.x + texture(yTileSpec, yTex).r * planarTextureCoefficients.y +texture(zTileSpec, zTex).r * planarTextureCoefficients.z;
 
 	//vec3 xTan = vec3(normal.z, normal.y, -normal.x);
 	//vec3 xCoTan = vec3(normal.y, -normal.x, normal.z);
@@ -55,13 +61,17 @@ void main(void){
 	//
 	//vec3 zTan = vec3(-normal.z, normal.y, normal.x);
 	//vec3 zCoTan = vec3(normal.x, -normal.z, normal.y);
-	normal = normalize(normal + vec3(0, xBump.x, xBump.y) * planarTextureCoefficients.xxx + vec3(yBump.y, 0, yBump.x) *planarTextureCoefficients.yyy + vec3(zBump.x, zBump.y, 0) * planarTextureCoefficients.zzz);
-
-	vec4 diffuseColor = vec4(0, 0, 0, 1);
+	vec3 use_normal = normalize(normal + vec3(0, xBump.x, xBump.y) * planarTextureCoefficients.xxx + vec3(yBump.y, 0, yBump.x) *planarTextureCoefficients.yyy + vec3(zBump.x, zBump.y, 0) * planarTextureCoefficients.zzz);
+	vec4 diffuseColor = vec4(0.3, 0.3, 0.3, 1);
 	for(int i = 0; i < 10; ++i){
 		vec4 lightDir = position[i] - worldPos;
-		float intensity = clamp(dot(normal, normalize(lightDir).xyz), 0.0, 1.0);
+		float intensity = clamp(dot(use_normal, normalize(lightDir).xyz), 0.0, 1.0);
+
+		vec4 h = normalize(lightDir + viewDir);
+		float g = pow( clamp(dot( use_normal, h.xyz ), 0, 1  ) , 30.0f );
+
 		diffuseColor +=  color[i] *intensity;
+		diffuseColor +=  vec4(1, 1, 1, 0) * g;
 	}
 	
 	//vec4 xColor = vec4(1, 0, 0, 1);
