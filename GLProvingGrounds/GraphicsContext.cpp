@@ -148,3 +148,11 @@ void GraphicsContext::RegisterShader(ShaderProgram* toAdd, int pass){
 	}
 	defShaderPerPass[pass] = toAdd;
 }
+int GraphicsContext::GetWindowHeight()
+{
+	return windowHeight;
+}
+int GraphicsContext::GetWindowWidth()
+{
+	return windowWidth;
+}

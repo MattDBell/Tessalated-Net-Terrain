@@ -141,7 +141,7 @@ template<int ROWS>
 MVector<ROWS> MVector<ROWS>::Invalid()
 {
 	MVector<ROWS> ret;
-	float values[ROWS] = {std::numeric_limits::signaling_NAN()};
+	float values[ROWS] = {std::numeric_limits<float>::signaling_NaN()};
 	ret.SetValues(values);
 	return ret;
 }

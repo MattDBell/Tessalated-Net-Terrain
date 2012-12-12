@@ -37,8 +37,8 @@ struct TestScene{
 		float lookAtArr[] = {0, 0, 0};
 		lookAt.SetValues( lookAtArr) ;	
 
-		AspectRatio.SetValue(0, 1);
-		AspectRatio.SetValue(1, 1);
+		AspectRatio.SetValue(0, (float)context->GetWindowWidth());
+		AspectRatio.SetValue(1, (float)context->GetWindowHeight());
 		cam->SetProj(0.01f, 1000.0f, (float)(30.0f/ 180 * PI) , AspectRatio );
 		cam->LookAt(camStart, lookAt, upVec);
 
@@ -97,10 +97,19 @@ struct TestScene{
 		}
 		
 		//If user clicks
-		//Cast a ray find point of contact with MC
-		//Do a sphere cast around that point of brushSize
-		//lower density depending on collision
-
+		static bool wasDown = false;
+		int x = 0, y = 0;
+		bool isDown = Input::Get()->GetLastMousePos(x, y);
+		MVector<3> ray = {0, 0, 0};
+		if(wasDown && !isDown)
+		{
+			//Cast a ray find point of contact with MC
+			ray= cam->Deproject(x, y);
+			(ray);
+			//Do a sphere cast around that point of brushSize
+			//lower density depending on collision
+		}
+		wasDown = isDown;
 		elevation = elevation > 0.9f ? 0.9f : elevation < -0.9f ? -0.9f : elevation;
 		if(azimuth > 2 * PI) azimuth -= 2 * PI;
 		MVector<3> camPos= { cos(elevation) * cos(azimuth) * distance, sin(elevation)* distance, cos(elevation) * sin(azimuth)* distance};

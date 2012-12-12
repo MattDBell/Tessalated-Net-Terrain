@@ -11,7 +11,7 @@ class Camera{
 	static Camera * current;
 	cameraMatrices matrices;
 	Matrix<4, 4> world;
-
+	Matrix<4, 4> inverseProj;
 
 	
 	MVector<3> position;

@@ -29,6 +29,8 @@ public:
 	void			RegisterGraphComp(GraphicsComponent* toAdd, int pass);
 	void			RegisterCamera(Camera* toAdd, int pass);
 	void			RegisterShader(ShaderProgram* toAdd, int pass);
+	int				GetWindowWidth();
+	int				GetWindowHeight();
 private:
 	int numPasses;
 	ShaderProgram* defaultShaderForPass;

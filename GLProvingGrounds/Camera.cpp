@@ -72,14 +72,23 @@ void Camera::LookAt(MVector<3> &position, MVector<3> &target, MVector<3> &Up){
 }
 void Camera::SetProj(float nearClip, float farClip, float fieldOfViewY, MVector<2> &aspectRatio){
 	zoomY = 1/tan(fieldOfViewY/2);
+	aspect = aspectRatio;
 	float zoomX = zoomY * aspectRatio.GetValue(1) /aspectRatio.GetValue(0);
 	
 	
 	float projValues[16] = {	zoomX,	0,		0,		0,   
 								0,		zoomY,	0,		0,	
-								0,		0,		(farClip + nearClip)/(farClip-nearClip), 1,
+								0,		0,		(farClip + nearClip)/( farClip- nearClip ), 1,
 								0,		0,		(2 * nearClip * farClip) /( nearClip-farClip  ),	0}; 
 	matrices.proj.SetValues(projValues);
+	float invProjValues[16] = {
+		1/zoomX, 0, 0, 0,
+		0, 1/zoomY, 0, 0,
+		0, 0, 0, (nearClip - farClip) / (2 * nearClip * farClip),
+		0, 0, 1, (farClip + nearClip)/(2 * nearClip * farClip)};
+	inverseProj.SetValues(invProjValues);
+	MVector<4> yo = { 3, 2, 1, 1};
+	yo = matrices.proj.multiply(inverseProj).multiply(yo);
 	//Matrix<4, 4> v = {1, 0, 0, 0, 0, 1, 0 ,0, 0,0, 1, 0, 0, 0, 0, 1}; 
 	//matrices.proj = v;
 	//matrices.proj.Transpose();
@@ -92,5 +101,12 @@ void Camera::SetCurrent(){
 }
 MVector<3> Camera::Deproject(int x, int y)
 {
+	float normX = (2 * (float)x / aspect.GetValue(0)) -1;
+	float normY = 1 - (2 * (float)y / aspect.GetValue(1));
 
+	MVector<4> nearPlane = {normX, normY, 0, 1 };
+	nearPlane = world.multiply(inverseProj).multiply(nearPlane);
+	MVector<3> ret = { nearPlane.GetValue(0)/nearPlane.GetValue(3), nearPlane.GetValue(1)/nearPlane.GetValue(3), nearPlane.GetValue(2)/nearPlane.GetValue(3)  };
+	ret = (ret - position).Normalized();
+	return ret;
 }

@@ -173,14 +173,8 @@ template<int ROWS, int COLUMNS>
 Matrix<ROWS, COLUMNS>		Matrix<ROWS, COLUMNS>::Inversed() const{//HOLD OFF FO' NOW
 	if(ROWS != COLUMNS)
 		return Matrix<ROWS, COLUMNS>::Invalid();
-	Matrix ret= Matrix<COLUMNS, ROWS>();
 
-	float inverse[ROWS*COLUMNS] = {0};
-	for(int i = 0; i < ROWS * COLUMNS; i += COLUMNS + 1)
-		inverse[i] = 1.0f;
-
-
-
+	Matrix ret= Matrix<COLUMNS, ROWS>::Identity();
 	//do stuff
 	return ret;
 }
