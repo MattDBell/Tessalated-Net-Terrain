@@ -1,78 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="BasicGraphicsComponent.cpp" />
-    <ClCompile Include="BoolArray.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="GraphicsComponent.cpp" />
-    <ClCompile Include="GraphicsContext.cpp" />
-    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MathDefinedFunction.cpp" />
-    <ClCompile Include="Matrix.cpp" />
-    <ClCompile Include="MVector.cpp" />
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="UniformBufferObject.cpp" />
-    <ClCompile Include="Macros.cpp" />
-    <ClCompile Include="Light.cpp" />
     <ClCompile Include="MarchingCubeAsteroid.cpp" />
-    <ClCompile Include="Debugging.cpp">
-      <Filter>Debugging</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicGraphicsComponent.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="GraphicsComponent.h" />
-    <ClInclude Include="GraphicsContext.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Macros.h" />
-    <ClInclude Include="Matrix.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="MVector.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="UniformBufferObject.h" />
-    <ClInclude Include="VertexInfo.h" />
     <ClInclude Include="TestCube.h">
       <Filter>Testing</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>Testing</Filter>
     </ClInclude>
-    <ClInclude Include="BoolArray.h" />
-    <ClInclude Include="Light.h" />
     <ClInclude Include="MarchingCubeAsteroid.h" />
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{922f61da-732b-4958-9b6f-d202a56d4574}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Testing">
-      <UniqueIdentifier>{b7cf5395-7b49-4779-9542-f255c24b0c80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{493ee475-f075-4174-8888-f6c6a35b8bc4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Debugging">
-      <UniqueIdentifier>{174270cb-29df-4e66-a6f9-4c8056f6b9a2}</UniqueIdentifier>
+      <UniqueIdentifier>{ecba5012-cc0c-4e54-8797-e3659779a136}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="CubePixel.glsl">
-      <Filter>Shader</Filter>
+      <Filter>Shaders</Filter>
     </None>
     <None Include="CubeVertex.glsl">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="MarchingCubeVertex.glsl">
-      <Filter>Shader</Filter>
+      <Filter>Shaders</Filter>
     </None>
     <None Include="MarchingCubeGeometry.glsl">
-      <Filter>Shader</Filter>
+      <Filter>Shaders</Filter>
     </None>
     <None Include="MarchingCubePixel.glsl">
-      <Filter>Shader</Filter>
+      <Filter>Shaders</Filter>
     </None>
-    <None Include="Debugging.h">
-      <Filter>Debugging</Filter>
+    <None Include="MarchingCubeVertex.glsl">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

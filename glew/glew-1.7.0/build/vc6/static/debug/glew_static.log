@@ -1,5 +1,5 @@
-﻿Build started 5/19/2012 7:18:04 PM.
-     1>Project "D:\Game Design\Graphics\GLProvingGrounds\glew\glew-1.7.0\build\vc6\glew_static.vcxproj" on node 2 (build target(s)).
+﻿Build started 12/19/2012 6:17:34 PM.
+     1>Project "D:\Game Design\Graphics\GitGL\glew\glew-1.7.0\build\vc6\glew_static.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating ".\static/debug\glew_static.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
@@ -7,18 +7,18 @@
          glew.c
        ResourceCompile:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /D _DEBUG /D GLEW_STATIC /D _VC80_UPGRADE=0x0600 /l"0x0409" /nologo /fo".\static/debug\glew.res" glew.rc 
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(1151,5): warning MSB8012: TargetPath(D:\Game Design\Graphics\GLProvingGrounds\glew\glew-1.7.0\build\vc6\.\../../lib\glew_static.lib) does not match the Library's OutputFile property value (D:\Game Design\Graphics\GLProvingGrounds\glew\glew-1.7.0\lib\glew32sd.lib). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(1151,5): warning MSB8012: TargetPath(D:\Game Design\Graphics\GitGL\glew\glew-1.7.0\build\vc6\.\../../lib\glew_static.lib) does not match the Library's OutputFile property value (D:\Game Design\Graphics\GitGL\glew\glew-1.7.0\lib\glew32sd.lib). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(1153,5): warning MSB8012: TargetName(glew_static) does not match the Library's OutputFile property value (glew32sd). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Lib.OutputFile).
        Lib:
          D:\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"../../lib/glew32sd.lib" /NOLOGO .\static/debug\glew.res
          .\static/debug\glew.obj
      1>LINK : warning LNK4068: /MACHINE not specified; defaulting to X86
-         glew_static.vcxproj -> D:\Game Design\Graphics\GLProvingGrounds\glew\glew-1.7.0\build\vc6\.\../../lib\glew_static.lib
+         glew_static.vcxproj -> D:\Game Design\Graphics\GitGL\glew\glew-1.7.0\build\vc6\.\../../lib\glew_static.lib
        FinalizeBuildStatus:
          Deleting file ".\static/debug\glew_static.unsuccessfulbuild".
          Touching ".\static/debug\glew_static.lastbuildstate".
-     1>Done Building Project "D:\Game Design\Graphics\GLProvingGrounds\glew\glew-1.7.0\build\vc6\glew_static.vcxproj" (build target(s)).
+     1>Done Building Project "D:\Game Design\Graphics\GitGL\glew\glew-1.7.0\build\vc6\glew_static.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.75
+Time Elapsed 00:00:01.28

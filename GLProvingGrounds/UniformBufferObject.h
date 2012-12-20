@@ -1,8 +1,9 @@
 #ifndef  UNIFORMBUFFEROBJECT_H
 #define  UNIFORMBUFFEROBJECT_H
 #include "Macros.h"
-#include <vector>
 
+#include <vector>
+#include <GL/glew.h>
 #define OFFSETOF(CLASS, MEMBER)  ((char*)&((( CLASS* )0)->MEMBER) - (char*)0 )
 
 struct UBOinterface{

@@ -2,9 +2,10 @@
 #define MARCHINGCUBEASTEROID_H
 
 #include "BasicGraphicsComponent.h"
-#include "Texture.h"
 #include "UniformBufferObject.h"
 #include <cstdint>
+
+class Texture;
 //Plain Old Data Type for UBO
 struct LookupTables{
 	uint32_t edgetable	[64  * 4];	

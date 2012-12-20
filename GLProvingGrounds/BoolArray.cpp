@@ -1,5 +1,6 @@
 #include "BoolArray.h"
 #include <exception>
+
 template<int numBools>
 BoolArray<numBools>::BoolArray()
 	: index(0)

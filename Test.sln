@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLProvingGrounds", "GLProvingGrounds\GLProvingGrounds.vcxproj", "{0D02445E-56B1-4D78-BC7C-99919639EC27}"
+	ProjectSection(ProjectDependencies) = postProject
+		{85AEC942-2788-4E3B-80B7-C09E07A2DE92} = {85AEC942-2788-4E3B-80B7-C09E07A2DE92}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngine", "GameEngine\GameEngine.vcxproj", "{85AEC942-2788-4E3B-80B7-C09E07A2DE92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D02445E-56B1-4D78-BC7C-99919639EC27}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0D02445E-56B1-4D78-BC7C-99919639EC27}.Debug|Win32.Build.0 = Debug|Win32
+		{0D02445E-56B1-4D78-BC7C-99919639EC27}.Release|Win32.ActiveCfg = Release|Win32
+		{0D02445E-56B1-4D78-BC7C-99919639EC27}.Release|Win32.Build.0 = Release|Win32
+		{85AEC942-2788-4E3B-80B7-C09E07A2DE92}.Debug|Win32.ActiveCfg = Debug|Win32
+		{85AEC942-2788-4E3B-80B7-C09E07A2DE92}.Debug|Win32.Build.0 = Debug|Win32
+		{85AEC942-2788-4E3B-80B7-C09E07A2DE92}.Release|Win32.ActiveCfg = Release|Win32
+		{85AEC942-2788-4E3B-80B7-C09E07A2DE92}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

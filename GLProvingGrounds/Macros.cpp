@@ -1,5 +1,5 @@
 #include "Macros.h"
-
+#include <GL/glew.h>
 void CheckErrors(){
 	GLenum result = glGetError();
 	while(result != GL_NO_ERROR )

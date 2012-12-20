@@ -1,6 +1,4 @@
 #include "GraphicsComponent.h"
-#include "GL\glew.h"
-#include "GL\wglew.h"
 #include "Camera.h"
 
 

@@ -1,16 +1,10 @@
 #ifndef GRAPHICSENGINE
 #define GRAPHICSENGINE
 
-#include <Windows.h>
-#include <vector>
-#include <GL/glew.h>
+#include <GL/Glew.h>
 #include <GL/wglew.h>
+#include <vector>
 #include "Texture.h"
-
-
-
-
-
 class GraphicsComponent;
 class Camera;
 class ShaderProgram;

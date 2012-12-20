@@ -1,7 +1,6 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
-#include "Macros.h"
-
+#include <GL/glew.h>
 class Texture{
 public:
 	enum TexType{

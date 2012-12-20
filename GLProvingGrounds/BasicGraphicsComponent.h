@@ -12,7 +12,7 @@ private:
 	BasicGraphicsComponent();
 protected:
 	
-	ShaderProgram	* shader;
+	ShaderProgram* shader;
 
 	char			*vertex, *tessalationControl, *tessalationEvaluation, *geometry, *pixel;
 	

@@ -1,15 +1,14 @@
 #ifndef SHADERPROGRAM
 #define SHADERPROGRAM
 
+#include <GL/glew.h>
 #include <string>
 #include <map>
 #include "Matrix.h"
-#include "GL\glew.h"
-#include "GL\wglew.h"
 
 class DrawnEntity;
 
-class ShaderProgram{
+class  ShaderProgram{
 	enum {VERTEX, TESSALATION_CONTROL, TESSALATION_EVALUATION, GEOMETRY, PIXEL, TOTAL};
 	static ShaderProgram*			current;
 	unsigned int					buffer;

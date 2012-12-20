@@ -5,6 +5,8 @@
 #include <cassert>
 #include <ctime>
 #include "Input.h"
+#include "Texture.h"
+
 
 
 #define PACKFOUR(a, b, c, d) ((a << 24) | ((b & 0xff) << 16) | ((c & 0xff) << 8) | (d & 0xff))

@@ -1,3 +1,4 @@
+#include "Macros.h"
 #include "Texture.h"
 
 Texture::Texture(TexType t, GLint format)

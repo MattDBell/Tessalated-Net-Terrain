@@ -43,6 +43,9 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Game Design\Graphics\GitGL\glew\glew-1.7.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Game Design\Graphics\GitGL\glew\glew-1.7.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -59,12 +62,27 @@
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)/glew/glew-1.7.0/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GameEngine.lib;glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)/glew/glew-1.7.0/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImportLibrary>
+      </ImportLibrary>
     </Link>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <TargetMachine>MachineX86</TargetMachine>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -87,58 +105,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BasicGraphicsComponent.cpp" />
-    <ClCompile Include="BoolArray.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="GraphicsComponent.cpp" />
-    <ClCompile Include="GraphicsContext.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="Macros.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MarchingCubeAsteroid.cpp" />
-    <ClCompile Include="MathDefinedFunction.cpp" />
-    <ClCompile Include="Matrix.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="MVector.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="ShaderProgram.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="UniformBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicGraphicsComponent.h" />
-    <ClInclude Include="BoolArray.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="GraphicsComponent.h" />
-    <ClInclude Include="GraphicsContext.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="Macros.h" />
     <ClInclude Include="MarchingCubeAsteroid.h" />
-    <ClInclude Include="Matrix.h" />
-    <ClInclude Include="ShaderProgram.h" />
-    <ClInclude Include="MVector.h" />
     <ClInclude Include="TestCube.h" />
     <ClInclude Include="TestScene.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="UniformBufferObject.h" />
-    <ClInclude Include="VertexInfo.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CubePixel.glsl" />
-    <None Include="CubeVertex.glsl" />
-    <ClCompile Include="Debugging.cpp">
+    <None Include="CubePixel.glsl">
       <FileType>Document</FileType>
-    </ClCompile>
-    <None Include="Debugging.h" />
-    <None Include="MarchingCubeGeometry.glsl" />
-    <None Include="MarchingCubePixel.glsl" />
-    <None Include="MarchingCubeVertex.glsl" />
+    </None>
+    <None Include="CubeVertex.glsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="MarchingCubeGeometry.glsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="MarchingCubePixel.glsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="MarchingCubeVertex.glsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
