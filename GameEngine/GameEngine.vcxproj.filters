@@ -13,105 +13,108 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Debugging">
-      <UniqueIdentifier>{afed5b27-8834-45f6-87d5-8002084a7459}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\GLProvingGrounds\BasicGraphicsComponent.cpp">
+    <ClCompile Include="src\BasicGraphicsComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\BoolArray.cpp">
+    <ClCompile Include="src\BoolArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Camera.cpp">
+    <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\GraphicsComponent.cpp">
+    <ClCompile Include="src\Debugging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\GraphicsContext.cpp">
+    <ClCompile Include="src\GraphicsComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Input.cpp">
+    <ClCompile Include="src\GraphicsContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Light.cpp">
+    <ClCompile Include="src\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Macros.cpp">
+    <ClCompile Include="src\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\MathDefinedFunction.cpp">
+    <ClCompile Include="src\Macros.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Matrix.cpp">
+    <ClCompile Include="src\MathDefinedFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\MVector.cpp">
+    <ClCompile Include="src\Matrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\ShaderProgram.cpp">
+    <ClCompile Include="src\MVector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Texture.cpp">
+    <ClCompile Include="src\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\UniformBufferObject.cpp">
+    <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Debugging.cpp">
-      <Filter>Debugging</Filter>
+    <ClCompile Include="src\UniformBufferObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RedirectedGlew.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\GLProvingGrounds\VertexInfo.h">
+    <ClInclude Include="src\BasicGraphicsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\BasicGraphicsComponent.h">
+    <ClInclude Include="src\BoolArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\BoolArray.h">
+    <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\Camera.h">
+    <ClInclude Include="src\Debugging.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\GraphicsComponent.h">
+    <ClInclude Include="src\GraphicsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\GraphicsContext.h">
+    <ClInclude Include="src\GraphicsContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\Input.h">
+    <ClInclude Include="src\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\Light.h">
+    <ClInclude Include="src\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\Macros.h">
+    <ClInclude Include="src\Macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\Matrix.h">
+    <ClInclude Include="src\Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\MVector.h">
+    <ClInclude Include="src\MVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\ShaderProgram.h">
+    <ClInclude Include="src\ShaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\Texture.h">
+    <ClInclude Include="src\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\UniformBufferObject.h">
+    <ClInclude Include="src\UniformBufferObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\GLProvingGrounds\Debugging.h">
-      <Filter>Debugging</Filter>
+    <ClInclude Include="src\VertexInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RedirectedGlew.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

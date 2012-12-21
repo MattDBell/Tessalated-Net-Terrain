@@ -15,7 +15,7 @@ const float PI = 3.1415926f;
 UniformBufferObject<LookupTables>* MarchingCubeAsteroid::tables = 0;
 
 MarchingCubeAsteroid::MarchingCubeAsteroid(VertexInfo * vInfo, int numVIs, int numElements, Texture* tex3d)
-	:BasicGraphicsComponent("MarchingCubeVertex.glsl", NULL, NULL, "MarchingCubeGeometry.glsl", "MarchingCubePixel.glsl", vInfo, numVIs, 
+	:BasicGraphicsComponent("Shaders/MarchingCubeVertex.glsl", NULL, NULL, "Shaders/MarchingCubeGeometry.glsl", "Shaders/MarchingCubePixel.glsl", vInfo, numVIs, 
 	numElements, GraphicsComponent::PM_GL_POINTS), tex3d(tex3d), numPairs(0), currtime(0), updateState(SPHERE)
 {
 	MVector<4> t = {-16, -16, -16, 1};

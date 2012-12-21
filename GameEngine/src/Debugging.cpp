@@ -1,6 +1,5 @@
 #include "Debugging.h"
 #include <cmath>
-//return " ( number ) :
 
 #pragma warning (push)
 #pragma warning (disable: 4996)

@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MarchingCubeAsteroid.cpp" />
+    <ClCompile Include="src/main.cpp" />
+    <ClCompile Include="src/MarchingCubeAsteroid.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestCube.h">
+    <ClInclude Include="src/TestCube.h">
       <Filter>Testing</Filter>
     </ClInclude>
-    <ClInclude Include="TestScene.h">
+    <ClInclude Include="src/TestScene.h">
       <Filter>Testing</Filter>
     </ClInclude>
-    <ClInclude Include="MarchingCubeAsteroid.h" />
+    <ClInclude Include="src/MarchingCubeAsteroid.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -22,19 +22,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CubePixel.glsl">
+    <None Include="Shaders/CubePixel.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="CubeVertex.glsl">
+    <None Include="Shaders/CubeVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="MarchingCubeGeometry.glsl">
+    <None Include="Shaders/MarchingCubeGeometry.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="MarchingCubePixel.glsl">
+    <None Include="Shaders/MarchingCubePixel.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="MarchingCubeVertex.glsl">
+    <None Include="Shaders/MarchingCubeVertex.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

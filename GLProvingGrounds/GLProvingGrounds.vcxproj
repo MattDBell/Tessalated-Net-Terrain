@@ -50,7 +50,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/glew/glew-1.7.0/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/GameEngine/src;$(SolutionDir)/glew/glew-1.7.0/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -62,7 +62,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>GameEngine.lib;glew32sd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>GameEngine.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(TargetDir);$(SolutionDir)/glew/glew-1.7.0/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -105,28 +105,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MarchingCubeAsteroid.cpp" />
+    <ClCompile Include="src/main.cpp" />
+    <ClCompile Include="src/MarchingCubeAsteroid.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MarchingCubeAsteroid.h" />
-    <ClInclude Include="TestCube.h" />
-    <ClInclude Include="TestScene.h" />
+    <ClInclude Include="src/MarchingCubeAsteroid.h" />
+    <ClInclude Include="src/TestCube.h" />
+    <ClInclude Include="src/TestScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CubePixel.glsl">
+    <None Include="Shaders/CubePixel.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="CubeVertex.glsl">
+    <None Include="Shaders/CubeVertex.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="MarchingCubeGeometry.glsl">
+    <None Include="Shaders/MarchingCubeGeometry.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="MarchingCubePixel.glsl">
+    <None Include="Shaders/MarchingCubePixel.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="MarchingCubeVertex.glsl">
+    <None Include="Shaders/MarchingCubeVertex.glsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

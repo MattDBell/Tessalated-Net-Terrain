@@ -101,7 +101,7 @@ public:
 		vIs[3].Set("Normal"			, true	, 8 * 3 * sizeof(GLfloat)	, normals,	VertexInfo::U_GL_STATIC_DRAW,
 			3,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 
-		return new TestCube("CubeVertex.glsl", NULL, NULL, NULL, "CubePixel.glsl", vIs, 4, 12 * 3, PM_GL_TRIANGLES, tex);
+		return new TestCube("Shaders/CubeVertex.glsl", NULL, NULL, NULL, "Shaders/CubePixel.glsl", vIs, 4, 12 * 3, PM_GL_TRIANGLES, tex);
 		
 	}
 	virtual void EntitySpecificShaderSetup(){

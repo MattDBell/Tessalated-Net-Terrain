@@ -80,46 +80,46 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\GLProvingGrounds\BasicGraphicsComponent.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\BoolArray.cpp">
+    <ClCompile Include="src\RedirectedGlew.cpp" />
+    <ClCompile Include="src\BasicGraphicsComponent.cpp" />
+    <ClCompile Include="src\BoolArray.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\Camera.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\Debugging.cpp">
-      <FileType>Document</FileType>
-    </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\GraphicsComponent.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\GraphicsContext.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\Input.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\Light.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\Macros.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\MathDefinedFunction.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\Matrix.cpp">
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Debugging.cpp" />
+    <ClCompile Include="src\GraphicsComponent.cpp" />
+    <ClCompile Include="src\GraphicsContext.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\Macros.cpp" />
+    <ClCompile Include="src\MathDefinedFunction.cpp" />
+    <ClCompile Include="src\Matrix.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\MVector.cpp">
+    <ClCompile Include="src\MVector.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\GLProvingGrounds\ShaderProgram.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\Texture.cpp" />
-    <ClCompile Include="..\GLProvingGrounds\UniformBufferObject.cpp" />
+    <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\UniformBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\GLProvingGrounds\BasicGraphicsComponent.h" />
-    <ClInclude Include="..\GLProvingGrounds\BoolArray.h" />
-    <ClInclude Include="..\GLProvingGrounds\Camera.h" />
-    <ClInclude Include="..\GLProvingGrounds\Debugging.h" />
-    <ClInclude Include="..\GLProvingGrounds\GraphicsComponent.h" />
-    <ClInclude Include="..\GLProvingGrounds\GraphicsContext.h" />
-    <ClInclude Include="..\GLProvingGrounds\Input.h" />
-    <ClInclude Include="..\GLProvingGrounds\Light.h" />
-    <ClInclude Include="..\GLProvingGrounds\Macros.h" />
-    <ClInclude Include="..\GLProvingGrounds\Matrix.h" />
-    <ClInclude Include="..\GLProvingGrounds\MVector.h" />
-    <ClInclude Include="..\GLProvingGrounds\ShaderProgram.h" />
-    <ClInclude Include="..\GLProvingGrounds\Texture.h" />
-    <ClInclude Include="..\GLProvingGrounds\UniformBufferObject.h" />
-    <ClInclude Include="..\GLProvingGrounds\VertexInfo.h" />
+    <ClInclude Include="src\RedirectedGlew.h" />
+    <ClInclude Include="src\BasicGraphicsComponent.h" />
+    <ClInclude Include="src\BoolArray.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Debugging.h" />
+    <ClInclude Include="src\GraphicsComponent.h" />
+    <ClInclude Include="src\GraphicsContext.h" />
+    <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Light.h" />
+    <ClInclude Include="src\Macros.h" />
+    <ClInclude Include="src\Matrix.h" />
+    <ClInclude Include="src\MVector.h" />
+    <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\UniformBufferObject.h" />
+    <ClInclude Include="src\VertexInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

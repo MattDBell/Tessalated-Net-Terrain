@@ -1,7 +1,7 @@
 #ifndef  UNIFORMBUFFEROBJECT_H
 #define  UNIFORMBUFFEROBJECT_H
 #include "Macros.h"
-
+#include "RedirectedGlew.h"
 #include <vector>
 #include <GL/glew.h>
 #define OFFSETOF(CLASS, MEMBER)  ((char*)&((( CLASS* )0)->MEMBER) - (char*)0 )
@@ -54,16 +54,16 @@ struct UniformBufferObject : public UBOinterface{
 		if(name != NULL){
 			free(name);
 		}
-		GLCALL(glDeleteBuffers(1, &uboIndex));
+		rglDeleteBuffers(1, &uboIndex);
 	}
 	void Initialize(){
 		int i = OFFSETOF(UniformBufferObject<int>, uboIndex);
 		printf("%d", i);
-		GLCALL(glGenBuffers(1, &uboIndex));
-		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
-		GLCALL(glBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), NULL, GL_STREAM_DRAW));
-		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, 0));
-		GLCALL(glBindBufferRange(GL_UNIFORM_BUFFER, uBOBindingIndex, uboIndex, 0, sizeof(dataStructure)));
+		rglGenBuffers(1, &uboIndex);
+		rglBindBuffer(GL_UNIFORM_BUFFER, uboIndex);
+		rglBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), NULL, GL_STREAM_DRAW);
+		rglBindBuffer(GL_UNIFORM_BUFFER, 0);
+		rglBindBufferRange(GL_UNIFORM_BUFFER, uBOBindingIndex, uboIndex, 0, sizeof(dataStructure));
 	}
 
 	void BindToShader(unsigned int programBuffer){
