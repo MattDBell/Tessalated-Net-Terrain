@@ -3,7 +3,6 @@
 #include "Macros.h"
 #include "RedirectedGlew.h"
 #include <vector>
-#include <GL/glew.h>
 #define OFFSETOF(CLASS, MEMBER)  ((char*)&((( CLASS* )0)->MEMBER) - (char*)0 )
 
 struct UBOinterface{
@@ -57,8 +56,6 @@ struct UniformBufferObject : public UBOinterface{
 		rglDeleteBuffers(1, &uboIndex);
 	}
 	void Initialize(){
-		int i = OFFSETOF(UniformBufferObject<int>, uboIndex);
-		printf("%d", i);
 		rglGenBuffers(1, &uboIndex);
 		rglBindBuffer(GL_UNIFORM_BUFFER, uboIndex);
 		rglBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), NULL, GL_STREAM_DRAW);
@@ -67,18 +64,18 @@ struct UniformBufferObject : public UBOinterface{
 	}
 
 	void BindToShader(unsigned int programBuffer){
-		unsigned int uniformBlockIndex = GLCALL(glGetUniformBlockIndex(programBuffer, name));
+		unsigned int uniformBlockIndex = rglGetUniformBlockIndex(programBuffer, name);
 		if(uniformBlockIndex == GL_INVALID_INDEX)
 			return;
-		GLCALL(glUniformBlockBinding(programBuffer, uniformBlockIndex, uBOBindingIndex));
+		rglUniformBlockBinding(programBuffer, uniformBlockIndex, uBOBindingIndex);
 	}
-	void SubUpdate(GLintptr offset, GLsizeiptr size, void* data){
-		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
-		GLCALL(glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data));
+	void SubUpdate(ptrdiff_t offset, ptrdiff_t size, void* data){
+		rglBindBuffer(GL_UNIFORM_BUFFER, uboIndex);
+		rglBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
 	}
 	void Update(dataStructure* data){
-		GLCALL(glBindBuffer(GL_UNIFORM_BUFFER, uboIndex));
-		GLCALL(glBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), data, GL_STREAM_DRAW));
+		rglBindBuffer(GL_UNIFORM_BUFFER, uboIndex);
+		rglBufferData(GL_UNIFORM_BUFFER, sizeof(dataStructure), data, GL_STREAM_DRAW);
 	}
 };
 #endif //UNIFORMBUFFEROBJECT_H

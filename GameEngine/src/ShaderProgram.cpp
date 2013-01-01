@@ -1,5 +1,6 @@
 #include "ShaderProgram.h"
 #include <fstream>
+#include <GL/glew.h>
 #include "Macros.h"
 #include "UniformBufferObject.h"
 #include "Debugging.h"
@@ -116,7 +117,7 @@ void ShaderProgram::Bind(){
 }
 
 
-GLuint ShaderProgram::GetLocation(std::string name)
+unsigned int ShaderProgram::GetLocation(std::string name)
 {
 	if(Uniforms.find(name) == Uniforms.end())
 		Uniforms[name] = glGetUniformLocation(buffer, name.c_str());

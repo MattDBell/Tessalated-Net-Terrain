@@ -1,13 +1,21 @@
 #ifndef VERTEXINFO_H
 #define VERTEXINFO_H
-#include "Macros.h"
 #include <memory>
 
 
 struct VertexInfo{
 	enum	DataType{
-		DT_GL_UNSIGNED_INT					= 0x1405, 
+		DT_GL_BYTE							= 0x1400,
+		DT_GL_UNSIGNED_BYTE					= 0x1401,
+		DT_GL_SHORT							= 0x1402,
+		DT_GL_UNSIGNED_SHORT				= 0x1403,
+		DT_GL_INT							= 0x1404,
+		DT_GL_UNSIGNED_INT					= 0x1405,
 		DT_GL_FLOAT							= 0x1406,
+		DT_GL_2_BYTES						= 0x1407,
+		DT_GL_3_BYTES						= 0x1408,
+		DT_GL_4_BYTES						= 0x1409,
+		DT_GL_DOUBLE						= 0x140A,
 		DT_GL_COUNTER_TYPE_AMD				= 0x8BC0,
 		DT_GL_COUNTER_RANGE_AMD				= 0x8BC1,
 		DT_GL_UNSIGNED_INT64_AMD			= 0x8BC2,
@@ -29,21 +37,9 @@ struct VertexInfo{
 	};
 
 	
-
 	void Set(	char* name, bool isArrayBuffer, unsigned int dataBufferSize, void * dataBufferPtr, Usage usage,
-				int  elementIndex, int sizePerVertexAttrib, DataType type, bool isNormalized, int stride, void* offset){
-		this->name = name;
-		bIsArrayBuffer = isArrayBuffer;
-		this->dataBufferSize = dataBufferSize;
-		dataBuffer = std::shared_ptr<void>(dataBufferPtr);
-		this->usage = usage;
-		this->iElementIndex = elementIndex;
-		this->sizePerVertexAttrib = sizePerVertexAttrib;
-		this->type = type;
-		this->bIsNormalized = isNormalized;
-		this->stride = stride;
-		this->pointer = offset;
-	}
+		int  elementIndex, int sizePerVertexAttrib, DataType type, bool isNormalized, int stride, void* offset);
+	
 
 	char*			name;
 
@@ -64,38 +60,14 @@ struct VertexInfo{
 	int				stride;
 	void*			pointer;
 	
-	void BindAttribLocation(int shaderBuffer){
-		if(!bIsArrayBuffer)
-			return;
-		GLCALL(glBindAttribLocation(shaderBuffer, iElementIndex, name));
-	}
-	void Bind(){
-		GLCALL(glBindBuffer(bIsArrayBuffer ? GL_ARRAY_BUFFER : GL_ELEMENT_ARRAY_BUFFER, iBuffer));
-	}
-	void BufferData(){
-		GLCALL(glBufferData(bIsArrayBuffer ? GL_ARRAY_BUFFER : GL_ELEMENT_ARRAY_BUFFER,
-			dataBufferSize, dataBuffer.get(), usage));
-	}
-	void VertexAttribPointer(){
-		if(!bIsArrayBuffer)
-			return;
-		GLCALL(glVertexAttribPointer(iElementIndex, sizePerVertexAttrib, type, bIsNormalized ? GL_TRUE : GL_FALSE, stride, pointer));
-	}
-	void Initialize(){
-		Bind();
-		BufferData();
-		Enable();
-		VertexAttribPointer();
-		//
-	}
-
-	void Enable(){
-		if(!bIsArrayBuffer)
-			return;
-		GLCALL(glEnableVertexAttribArray(iElementIndex));
-	}
-	~VertexInfo(){
-		GLCALL(glDeleteBuffers(1, &iBuffer));
-	}
+	void BindAttribLocation(int shaderBuffer);
+	
+	void Bind();
+	void BufferData();
+	void VertexAttribPointer();
+	void Enable();
+	void Initialize();
+	~VertexInfo();
+	
 };
 #endif//VERTEXINFO_H

@@ -1,5 +1,6 @@
 #include "GraphicsComponent.h"
 #include "Camera.h"
+#include <GL\glew.h>
 
 
 GraphicsComponent::GraphicsComponent(VertexInfo* vInfos, int numVIs, int numElements, PrimitiveMode pmode)

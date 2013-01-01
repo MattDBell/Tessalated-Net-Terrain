@@ -47,23 +47,23 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(char * folderName, char* pref
 	//vertices will be thrown away.  But! For now, carry on.
 
 	VertexInfo *vIs = new VertexInfo[numVIs];
-	vIs[0].Set("VertexPosition"	, true	, 31 *31 *31 * 3 * sizeof(GLfloat)	, positions,	VertexInfo::U_GL_STATIC_DRAW,
+	vIs[0].Set("VertexPosition"	, true	, 31 *31 *31 * 3 * sizeof(float)	, positions,	VertexInfo::U_GL_STATIC_DRAW,
 		1,	3,	VertexInfo::DT_GL_FLOAT,	false, 0, 0 );
 
 	//Creation of Density field
 
-	Texture * tex3d = new Texture(Texture::TT_GL_TEXTURE_3D, GL_R32F); //This will definitely change.
+	Texture * tex3d = new Texture(Texture::TT_GL_TEXTURE_3D, Texture::TP_GL_R32F); //This will definitely change.
 
-	tex3d->SetParamInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	tex3d->SetParamInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	tex3d->SetParamInt(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	tex3d->SetParamInt(Texture::TP_GL_TEXTURE_MIN_FILTER, Texture::TP_GL_LINEAR);
+	tex3d->SetParamInt(Texture::TP_GL_TEXTURE_MAG_FILTER, Texture::TP_GL_LINEAR);
+	tex3d->SetParamInt(Texture::TP_GL_TEXTURE_WRAP_S, Texture::TP_GL_CLAMP_TO_EDGE);
+	tex3d->SetParamInt(Texture::TP_GL_TEXTURE_WRAP_T, Texture::TP_GL_CLAMP_TO_EDGE);
+	tex3d->SetParamInt(Texture::TP_GL_TEXTURE_WRAP_R, Texture::TP_GL_CLAMP_TO_EDGE);
 
 	Texture::TexData data;
 	memset(&data, 0, sizeof(Texture::TexData));
 
-	GLfloat d[32 * 32 * 32];
+	float d[32 * 32 * 32];
 	for(int z = 0; z < 32; ++z){
 		for(int y = 0; y < 32; ++y){
 			for(int x = 0; x < 32; ++x){
@@ -80,8 +80,8 @@ MarchingCubeAsteroid* MarchingCubeAsteroid::Create(char * folderName, char* pref
 	data.height		= 32;
 
 	data.level		= 0;
-	data.format		= GL_RED;
-	data.type		= GL_FLOAT;
+	data.format		= Texture::TP_GL_RED;
+	data.type		= VertexInfo::DT_GL_FLOAT;
 	data.data		=&d;
 
 	tex3d->GiveData(data);
@@ -145,7 +145,7 @@ struct TGAHeader
 	__int8		bitsPerPixel;
 	__int8		imgDesc;
 };
-GLint GetFormat(int bpp, int imgType)
+int GetFormat(int bpp, int imgType)
 {
 	switch (bpp)
 	{
@@ -153,9 +153,9 @@ GLint GetFormat(int bpp, int imgType)
 		switch(imgType)
 		{
 		case 2:
-			return GL_RGB8;
+			return Texture::TP_GL_RGB8;
 		case 10:
-			return GL_RGB8;
+			return Texture::TP_GL_RGB8;
 		}
 
 	}
@@ -206,7 +206,7 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 		colMap = new char[head.colMapLength * (head.colMapEntrySize+7) /8 ];
 		fread(colMap, 1, head.colMapLength * head.colMapEntrySize, f);
 	}
-	GLint gl_F =  GetFormat(head.bitsPerPixel, head.imgType);
+	int gl_F =  GetFormat(head.bitsPerPixel, head.imgType);
 	assert(gl_F);
 	
 	
@@ -292,18 +292,18 @@ void MarchingCubeAsteroid::LoadTexture(char* foldername, char* file, char* prefi
 	Texture::TexData td;
 	memset(&td, 0, sizeof(td));
 	td.data = data;
-	td.format = GL_RGB;
+	td.format = Texture::TP_GL_RGB;
 	td.height = head.height;
 	td.width = head.width;
 	td.level = 0;
-	td.type = GL_UNSIGNED_BYTE;
+	td.type = VertexInfo::DT_GL_UNSIGNED_BYTE;
 
 	tex->GiveData(td);
-	tex->SetParamInt(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	tex->SetParamInt(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	tex->SetParamInt(GL_TEXTURE_WRAP_S, GL_REPEAT);
-	tex->SetParamInt(GL_TEXTURE_WRAP_T, GL_REPEAT);
-	tex->SetParamInt(GL_TEXTURE_WRAP_R, GL_REPEAT);
+	tex->SetParamInt(Texture::TP_GL_TEXTURE_MIN_FILTER, Texture::TP_GL_LINEAR);
+	tex->SetParamInt(Texture::TP_GL_TEXTURE_MAG_FILTER, Texture::TP_GL_LINEAR);
+	tex->SetParamInt(Texture::TP_GL_TEXTURE_WRAP_S, Texture::TP_GL_REPEAT);
+	tex->SetParamInt(Texture::TP_GL_TEXTURE_WRAP_T, Texture::TP_GL_REPEAT);
+	tex->SetParamInt(Texture::TP_GL_TEXTURE_WRAP_R, Texture::TP_GL_REPEAT);
 
 
 	texs[(number-1) + offset] = tex;
@@ -336,7 +336,7 @@ void MarchingCubeAsteroid::Update(float dt){
 	dt = shrink? -dt : dt;
 	currtime += dt;
 	srand(randSeed);
-	static GLfloat d[32 * 32 * 32];
+	static float d[32 * 32 * 32];
 	for(int z = 0; z < 32; ++z){
 		for(int y = 0; y < 32; ++y){
 			for(int x = 0; x < 32; ++x){
@@ -407,8 +407,8 @@ void MarchingCubeAsteroid::Update(float dt){
 	data.height		= 32;
 	
 	data.level		= 0;
-	data.format		= GL_RED;
-	data.type		= GL_FLOAT;
+	data.format		= Texture::TP_GL_RED;
+	data.type		= VertexInfo::DT_GL_FLOAT;
 	data.data		=&d;
 	
 	tex3d->GiveData(data);

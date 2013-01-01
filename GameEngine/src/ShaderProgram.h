@@ -1,7 +1,6 @@
 #ifndef SHADERPROGRAM
 #define SHADERPROGRAM
 
-#include <GL/glew.h>
 #include <string>
 #include <map>
 #include "Matrix.h"
@@ -14,11 +13,11 @@ class  ShaderProgram{
 	unsigned int					buffer;
 	unsigned int					shaderBuffers[TOTAL];
 	bool							hasShader[TOTAL];
-	std::map<std::string, GLuint>	Uniforms;
+	std::map<std::string, unsigned int>	Uniforms;
 
 	char*			LoadSource(char * fileName);
-	GLuint			GetLocation(std::string name);
-	void			DebugShader(GLuint buffer);
+	unsigned int	GetLocation(std::string name);
+	void			DebugShader(unsigned int buffer);
 	int				LoadShaderPortion(char * source, int ShaderType, int buffer);
 public:
 	friend class GraphicsComponent;
@@ -32,7 +31,7 @@ public:
 	virtual void	SetUniformInt(std::string name, int value);
 	virtual void	Update(float deltaTime);
 	virtual void	Bind();
-	virtual GLint	Link();
+	virtual int		Link();
 	virtual int		Initialize(char * vertex, char * tessalationControl, char *tessaltionEvaluation, char * geometry, char * pixel);
 };
 

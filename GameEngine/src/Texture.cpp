@@ -1,13 +1,13 @@
 #include "Macros.h"
 #include "Texture.h"
-
-Texture::Texture(TexType t, GLint format)
+#include <GL/glew.h>
+Texture::Texture(TexType t, int format)
 		:type(t), format(format)
 {
 	GLCALL(glGenTextures(1, &buffer));
 }
 
-void Texture::SetStorage(GLsizei width, GLsizei height, GLsizei depth, GLint levels){
+void Texture::SetStorage(int width, int height, int depth, int levels){
 	switch(type){
 		case TT_GL_TEXTURE_1D:
 			GLCALL(glTexStorage1D(type, levels, format, width));
@@ -50,34 +50,34 @@ void Texture::GiveData(TexData &toGive){
 	GLCALL(glBindTexture(type, 0));
 }
 
-void Texture::SetParamFloat(GLenum pName, GLfloat param){
+void Texture::SetParamFloat(unsigned int pName, float param){
 	GLCALL(glBindTexture(type, buffer));
 	GLCALL(glTexParameterf(type, pName, param));
 }
 
-void Texture::SetParamInt(GLenum pName, GLint param) {
+void Texture::SetParamInt(unsigned int pName, int param) {
 
 	GLCALL( glBindTexture(type, buffer) );
 
 	GLCALL( glTexParameteri(type, pName, param) );
 }
 
-void Texture::SetParamFloatVector(GLenum pName, GLfloat * param){
+void Texture::SetParamFloatVector(unsigned int pName, float* param){
 	GLCALL( glBindTexture(type, buffer) );
 	GLCALL( glTexParameterfv(type, pName, param) );
 }
 
-void Texture::SetParamFloatVector(GLenum pName, GLint * param){
+void Texture::SetParamFloatVector(unsigned int pName, int * param){
 	GLCALL( glBindTexture(type, buffer) );
 	GLCALL( glTexParameteriv(type, pName, param) );
 }
 
-void Texture::SetParamIntVector(GLenum pName, GLint * param){
+void Texture::SetParamIntVector(unsigned int pName, int * param){
 	GLCALL( glBindTexture(type, buffer) );
 	GLCALL( glTexParameterIiv(type, pName, param) );
 }
 
-void Texture::SetParamIntVector(GLenum pName, GLuint* param){
+void Texture::SetParamIntVector(unsigned int pName, unsigned int* param){
 	GLCALL( glBindTexture(type, buffer) );
 	GLCALL( glTexParameterIuiv(type, pName, param) );
 }

@@ -1,4 +1,5 @@
 #include "BasicGraphicsComponent.h"
+#include <GL/glew.h>
 
 BasicGraphicsComponent::BasicGraphicsComponent(char * vertex, char * tessalationControl, char * tessalationEvaluation,  char * geometry, char * pixel,
 	VertexInfo* vInfos, int numVIs, int numElements, PrimitiveMode pmode)
