@@ -3,92 +3,23 @@
 #include <ctime>
 #include "Input.h"
 #include "TestScene.h"
+
+#ifdef _WIN32
+#include "Win32Utilities.h"
+typedef Win32Utilities OSUTILITIES;
+#endif
+
 //Test CPP
 GraphicsContext graphics;
 bool running = true;
 #include "Debugging.h"
 
-HINSTANCE hInstance;
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
-
-	switch(message){
-	case WM_SIZE:
-		graphics.ResizeWindow(LOWORD(lParam), HIWORD(lParam));
-		break;
-	case WM_SYSKEYDOWN:
-	case WM_KEYDOWN:
-		Input::Get()->UpdateWith(wParam, true);
-		break;
-	case WM_SYSKEYUP:
-	case WM_KEYUP:
-		Input::Get()->UpdateWith(wParam, false);
-		break;
-	case WM_KILLFOCUS:
-		Input::Get()->LoseFocus();
-		break;
-	case WM_SETFOCUS:
-		Input::Get()->GainFocus();
-		break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	case WM_LBUTTONDOWN:
-		Input::Get()->LMouseUpdate(lParam, true);
-		break;
-	case WM_LBUTTONUP:
-		Input::Get()->LMouseUpdate(lParam, false);
-	case WM_MOUSEMOVE:
-		Input::Get()->MousePosUpdate(lParam);
-		break;
-	}
-
-	return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-bool createWindow(LPCWSTR title, int width, int height){
-	WNDCLASS windowClass;
-	HWND hWnd;
-	DWORD dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
-	hInstance = GetModuleHandle(NULL);
-
-	windowClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	windowClass.lpfnWndProc = (WNDPROC) WndProc;
-	windowClass.cbClsExtra = 0;
-	windowClass.cbWndExtra = 0;
-	windowClass.hInstance = hInstance;
-	windowClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-	windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	windowClass.hbrBackground = NULL;
-	windowClass.lpszMenuName = NULL;
-	windowClass.lpszClassName = title;
-
-	if(!RegisterClass(&windowClass)){
-		return false;
-	}
-
-	hWnd = CreateWindowEx(dwExStyle, title, title, WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 0, width, height, NULL, NULL, hInstance, NULL);
-
-	graphics.CreateContext(hWnd);
-
-	ShowWindow(hWnd, SW_SHOW);
-	UpdateWindow(hWnd);
-
-	return true;
-}
-
 int WINAPI WinMain (HINSTANCE, HINSTANCE,
 					LPSTR, int){
-	MSG msg;
 	TestScene*  scene = NULL;
-	char *orig = "OpenGL Proving Grounds";
-	size_t origsize = strlen(orig) + 1;
-	const size_t newsize = 100;
-	size_t convertedChars = 0;
-	wchar_t wcstring[newsize];
-	mbstowcs_s(&convertedChars, wcstring, origsize, orig, _TRUNCATE);
 
-	createWindow(wcstring, 780, 780);
+
+	OSUTILITIES::createWindow("OpenGL Stuff", 780, 780, &graphics);
 
 	graphics.ResizeWindow(780, 780);
 	
@@ -99,16 +30,8 @@ int WINAPI WinMain (HINSTANCE, HINSTANCE,
 	LOG("main.log", "Entering Main Loop");
 	while (running){
 		beginning = std::clock();
-		while(PeekMessage(&msg, NULL, 0,0, PM_REMOVE)){
-			switch(msg.message){
-			case WM_QUIT:
-				running = false;
-				break;
-			default:
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-		}
+
+    running = OSUTILITIES::Update();
 		scene->Update(deltaTime);
 		graphics.RenderAll();
 		//graphics.RenderPass(0, NULL, scene->cam);
@@ -117,5 +40,5 @@ int WINAPI WinMain (HINSTANCE, HINSTANCE,
 	}
 	Debugging::Flush();
 	delete scene;
-	return (int) msg.wParam;
+	return OSUTILITIES::returnCode;
 }

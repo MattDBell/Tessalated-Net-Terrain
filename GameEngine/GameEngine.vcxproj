@@ -107,6 +107,7 @@
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\UniformBufferObject.cpp" />
     <ClCompile Include="src\VertexInfo.cpp" />
+    <ClCompile Include="src\Win32Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\RedirectedGlew.h" />
@@ -125,6 +126,7 @@
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\UniformBufferObject.h" />
     <ClInclude Include="src\VertexInfo.h" />
+    <ClInclude Include="src\Win32Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

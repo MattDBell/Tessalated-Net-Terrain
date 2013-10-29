@@ -331,7 +331,6 @@ void MarchingCubeAsteroid::Render(int pass){
 }
 
 void MarchingCubeAsteroid::Update(float dt){
-	//return;
 	static bool shrink = false;
 	dt = shrink? -dt : dt;
 	currtime += dt;

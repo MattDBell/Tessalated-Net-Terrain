@@ -1,7 +1,6 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <Windows.h>
 #include "BoolArray.h"
 
 class Input{
@@ -13,9 +12,9 @@ class Input{
 	bool mState;
 public:
 	static Input* Get();
-	void UpdateWith(WPARAM msg, bool up);
-	void LMouseUpdate(LPARAM msg, bool up);
-	void MousePosUpdate(LPARAM msg);
+	void UpdateWith(unsigned int key, bool to);
+	void LMouseUpdate(unsigned int x, unsigned int y, bool up);
+	void MousePosUpdate(unsigned int x, unsigned int y);
 	void GainFocus();
 	void LoseFocus();
 	bool GetLastMousePos(int & outXPos, int & outYPos);

@@ -95,6 +95,9 @@ struct TestScene{
 		if(Input::Get()->GetKey('5')){
 			asteroid->SetState(TERRAIN);
 		}
+    if(Input::Get()->GetKey('6')){
+      asteroid->SetState(MALLEABLE);
+    }
 		
 		//If user clicks
 		static bool wasDown = false;

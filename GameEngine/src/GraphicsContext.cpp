@@ -78,11 +78,6 @@ bool GraphicsContext::CreateContext(HWND hwnd){
 	GLCALL( glCullFace(GL_FRONT) );
 	GLCALL( glEnable(GL_DEPTH_TEST) );
 	GLCALL( glDepthFunc(GL_LEQUAL) );
-	//error = GLCALL(glewInit());
-	//if(error != GLEW_OK)
-	//	return false;
-
-
 
 	return true;
 }

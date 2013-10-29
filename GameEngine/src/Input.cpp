@@ -1,5 +1,5 @@
 #include "Input.h"
-#include <Windowsx.h>
+
 
 Input * Input::instance = 0;
 
@@ -14,31 +14,25 @@ Input * Input::Get(){
 
 void Input::GainFocus(){
 	keyStates.SetAllTo(false);
-	PBYTE arr = (PBYTE)malloc(sizeof(BYTE) * 256);
-	if(GetKeyboardState(arr)){
-		for(size_t i = 0; i < 256; ++i)
-			keyStates[i] = (arr[i]>> 7 )>0;
-	}
 }
 void Input::LoseFocus(){
 	keyStates.SetAllTo(false);
 }
 
-void Input::UpdateWith(WPARAM key, bool to){
-	if(key >= 0 && key <256)
-		keyStates[key] = to;
+void Input::UpdateWith(unsigned int key, bool to){
+	keyStates[key] = to;
 
 }
-void Input::LMouseUpdate(LPARAM position, bool to)
+void Input::LMouseUpdate(unsigned int x, unsigned int y, bool to)
 {
-	mxPos = GET_X_LPARAM(position);
-	myPos = GET_Y_LPARAM(position);
+	mxPos = x;
+	myPos = y;
 	mState = to;
 }
-void Input::MousePosUpdate(LPARAM position)
+void Input::MousePosUpdate(unsigned int x, unsigned int y)
 {
-	mxPos = GET_X_LPARAM(position);
-	myPos = GET_Y_LPARAM(position);
+	mxPos = x;
+	myPos = y;
 }
 bool Input::GetLastMousePos(int & outX, int &outY)
 {
